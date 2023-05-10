@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import formReducer from '../redux/slices/formSlice'
+import weightsReducer from '../redux/slices/weightsSlice'
 
 export const store = configureStore({
   reducer: {
-    form: formReducer
+    form: formReducer,
+    weights: weightsReducer
   },
 });
 

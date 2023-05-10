@@ -26,6 +26,11 @@
         appearance: none !important;
         padding-right: 2rem !important;
         cursor: pointer;
+
+        @include mobile{
+            background-position: calc(100% - 10px) center !important;
+            background-size: 12px;
+        }
     }
 
     .select-group{

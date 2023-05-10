@@ -1,11 +1,20 @@
 @use '../../../assets/scss/' as *;
 
 .truck-form-container {
+    
     form {
         display: flex;
         flex-direction: column;
         gap: 16px;
         margin-top: 32px;
+
+        label {
+            @include mobile {
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 20px;
+            }
+        }
 
         p {
             font-weight: 500;
@@ -16,6 +25,16 @@
 
         .button-container {
             margin-top: 16px;
+
+            @include mobile{
+                display: flex;
+                flex-direction: column-reverse;
+                gap: 16px;
+                margin-top: 0;
+                button{
+                    padding: 8px;
+                }
+            }
         }
 
         .input-group {
@@ -23,10 +42,18 @@
             width: 100%;
             gap: 16px;
 
+            @include mobile {
+                flex-direction: column;
+            }
+
             .button-plus {
                 width: 100%;
                 display: flex;
                 align-items: end;
+
+                @include mobile{
+                    width: auto;
+                }
 
                 button {
                     padding: 18px;
@@ -35,6 +62,10 @@
                     border: 1px solid #D7E2E2;
                     background-color: #F6F9F9;
                     cursor: pointer;
+
+                    @include mobile{
+                        padding: 8px;
+                    }
                 }
 
                 svg {
@@ -58,6 +89,10 @@
                     border: 1px solid #D7E2E2;
                     background-color: #F6F9F9;
                     cursor: pointer;
+
+                    @include mobile{
+                        padding: 10px;
+                    }
                 }
 
                 svg {
@@ -84,7 +119,13 @@
                     line-height: 24px;
                     background: #F6F9F9;
                     border: 1px solid #D7E2E2;
-                    // position: absolute;
+
+                    @include mobile {
+                        font-weight: 600;
+                        font-size: 10px;
+                        line-height: 20px;
+                        padding: 7px;
+                    }
                 }
             }
 
@@ -92,8 +133,15 @@
                 width: 100%;
             }
 
-            .form-control-select{
+            .form-control-select {
                 width: 100%;
+            }
+        }
+
+        @include mobile{
+            .second{
+                display: flex;
+                flex-direction: row;
             }
         }
     }

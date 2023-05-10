@@ -5,14 +5,24 @@ import { Button } from "../../components/Button";
 import { useDispatch } from "react-redux";
 import { fetchFormData } from "../../redux/slices/formSlice";
 import { AppDispatch } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
 
 export const Form: React.FC = (): JSX.Element => {
     const dispatch = useDispatch<AppDispatch>()
+    const navigate = useNavigate()
     const { register, handleSubmit, reset, formState: { errors } } = useForm<MainFormT>();
 
     const onSubmit = (data: MainFormT): void => {
-        console.log(data);
-        dispatch(fetchFormData(data))
+        console.log({ ...data, phone_number: phoneFormat(data.phone_number) });
+        dispatch(fetchFormData({ ...data, phone_number: phoneFormat(data.phone_number) }))
+    }
+
+    const phoneFormat = (phone: string): string => {
+        phone = phone.replace(/\D/g, '')
+        const areaCode = phone.substring(0, 3)
+        const middle = phone.substring(3, 6)
+        const end = phone.substring(6, 10)
+        return `(${areaCode}) ${middle}-${end}`
     }
 
     return (<div className="form-container">

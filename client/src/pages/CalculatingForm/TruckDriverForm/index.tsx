@@ -6,10 +6,11 @@ import { Input } from '../../../components/Input';
 import { Select } from '../../../components/Select';
 import { ReactComponent as Plus } from '../../../assets/images/plus.svg'
 import { ReactComponent as Delete } from '../../../assets/images/delete.svg'
-import './style.scss'
 import { AppDispatch } from '../../../redux/store';
 import { useDispatch } from 'react-redux';
 import { TruckFormT } from '../models/calculatingForms';
+import { getWeights } from '../../../redux/slices/weightsSlice';
+import './style.scss'
 
 export const TruckDriverForm: React.FC = (): JSX.Element => {
     const dispatch = useDispatch<AppDispatch>()
@@ -17,6 +18,10 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm<TruckFormT>({defaultValues:{purchased_by_company:'', name_of_second_driver:''}});
 
     const [secondDriver, setSecondDriver] = useState<boolean>(false)
+
+    useEffect(()=>{
+        dispatch(getWeights())
+    },[])
 
     const handleClickBack = (): void => {
         navigate('/')
@@ -34,7 +39,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
 
     return (<div className='truck-form-container'>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='input-group'>
+            <div className={`input-group ${secondDriver?'':'second'}`}>
                 <Input
                     type="text"
                     name="name_of_first_driver"
