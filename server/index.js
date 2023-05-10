@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const permitRouter = require('./routes/PermitRouter')
+const paymentRouter = require('./routes/PaymentRouter')
 
 require('dotenv').config()
 
@@ -21,6 +22,6 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use("/permit", permitRouter)
-
+app.use("/payment", paymentRouter)
 
 app.listen(5000)
