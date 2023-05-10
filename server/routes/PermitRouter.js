@@ -9,6 +9,5 @@ permitRouter.get('/get-exit-points', PermitController.getExitPoints)
 permitRouter.get('/get-start-points', PermitController.getStartPoints)
 permitRouter.get('/get-weights', PermitController.getWeights)
 permitRouter.post('/get-distance-and-price', PermitController.getTotalPriceAndDistance)
-permitRouter.post('/send-payment', PermitController.sendPayment)
 
 module.exports = permitRouter
