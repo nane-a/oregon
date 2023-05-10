@@ -10,7 +10,7 @@ const nodemailer = require('nodemailer');
 
 class PermitController {
     contacts = async (req, res) => {
-        const phoneRegex = /^\(\d{3}\)\d{3}-\d{4}$/;
+        const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
         const { usdot, permit_starting_date, local_business_name, email_adress, phone_number } = req.body
         let errorMessage = formValidation(req.body)
 
