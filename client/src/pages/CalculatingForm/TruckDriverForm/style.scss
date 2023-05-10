@@ -1,0 +1,100 @@
+@use '../../../assets/scss/' as *;
+
+.truck-form-container {
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 32px;
+
+        p {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0.42px;
+        }
+
+        .button-container {
+            margin-top: 16px;
+        }
+
+        .input-group {
+            display: flex;
+            width: 100%;
+            gap: 16px;
+
+            .button-plus {
+                width: 100%;
+                display: flex;
+                align-items: end;
+
+                button {
+                    padding: 18px;
+                    display: flex;
+                    align-items: center;
+                    border: 1px solid #D7E2E2;
+                    background-color: #F6F9F9;
+                    cursor: pointer;
+                }
+
+                svg {
+                    width: 18px;
+                    height: 18px;
+
+                    path {
+                        fill: $main-color;
+                    }
+                }
+            }
+
+            .button-delete {
+                display: flex;
+                align-items: end;
+
+                button {
+                    padding: 20px;
+                    display: flex;
+                    align-items: center;
+                    border: 1px solid #D7E2E2;
+                    background-color: #F6F9F9;
+                    cursor: pointer;
+                }
+
+                svg {
+                    width: 14px;
+                    height: 14px;
+
+                    path {
+                        fill: #F11212;
+                    }
+                }
+            }
+
+            .second-driver-group {
+                width: 100%;
+                display: flex;
+                gap: 16px;
+
+                .tax {
+                    display: flex;
+                    align-self: end;
+                    padding: 15px 13.5px;
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 24px;
+                    background: #F6F9F9;
+                    border: 1px solid #D7E2E2;
+                    // position: absolute;
+                }
+            }
+
+            .form-control-input {
+                width: 100%;
+            }
+
+            .form-control-select{
+                width: 100%;
+            }
+        }
+    }
+}

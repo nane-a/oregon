@@ -1,0 +1,82 @@
+@use '../../assets/scss/' as *;
+
+.terms {
+    width: 100%;
+    min-height: calc(100vh - $header-height);
+    padding: 40px 24px 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+
+    .greetings {
+        letter-spacing: 0.78px;
+
+        h1 {
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 32px;
+            line-height: 48px;
+            color: #231F20;
+            text-transform: uppercase;
+
+            @include tablet {
+                margin-bottom: 24px;
+            }
+
+            @include mobile {
+                margin-bottom: 16px;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 24px;
+                letter-spacing: 0.42px;
+            }
+        }
+
+
+        div {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            text-align: justify;
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 30px;
+
+            @include tablet {
+                gap: 16px;
+            }
+
+            @include mobile {
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 21px;
+                letter-spacing: 0.42px;
+            }
+        }
+
+        max-width: 1090px;
+        margin-bottom: 10px;
+    }
+
+    @include mobile {
+        min-height: calc(100vh - $header-height-mobile);
+    }
+
+    a {
+        color: #000;
+    }
+
+    .content {
+        div {
+            gap: 24px;
+        }
+    }
+
+    .title {
+        @include mobile {
+            padding: 16px;
+        }
+    }
+}

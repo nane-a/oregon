@@ -1,0 +1,60 @@
+@use '../../assets/scss/' as *;
+
+.stepper {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    border: 1px solid $main-color;
+
+    p {
+        @include middle {
+            display: none;
+        }
+    }
+}
+
+.main-stepper {
+    padding: 8px 16px;
+    background-color: $main-color;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    @include middle {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    path {
+        fill: #fff !important;
+    }
+}
+
+.secondary-stepper {
+    padding: 8px 16px;
+    border: 1px solid $main-color;
+    color: $main-color;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    @include middle {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    path {
+        fill: $main-color !important;
+    }
+}
+
+.disabled {
+    background-color: #39979C80;
+    border: 1px solid #39979c00;
+}

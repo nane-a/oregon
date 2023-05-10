@@ -1,0 +1,35 @@
+@use '../../assets/scss/' as *;
+
+.form-control-input {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+
+    label {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .input {
+        width: 100%;
+        height: 56px;
+        border: 1px solid #D7E2E2;
+        padding: 16px;
+        background-color: #F6F9F9;
+
+        @include mobile{
+            height: 36px;
+            font-size: 14px;
+        }
+    }
+
+    .error{
+        bottom: -14px;
+        right: 3px;
+        position: absolute;
+        font-size: 11px;
+        color: #F11212;
+    }
+}

@@ -1,0 +1,22 @@
+@use '../../assets/scss/' as *;
+
+.button {
+    width: 100%;
+    padding: 16px 10px;
+    border: 1px solid $main-color;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.main {
+    background-color: $main-color;
+    color: #fff;
+}
+
+.secondary {
+    color: $main-color;
+    background-color: #fff;
+}

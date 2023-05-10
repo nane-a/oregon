@@ -1,0 +1,76 @@
+@use '../../assets/scss/' as *;
+
+.calculating {
+    min-height: calc(100vh - $header-height);
+    padding: 80px 24px;
+
+    @include tablet {
+        min-height: calc(100vh - $header-height-tablet);
+        padding: 40px 24px;
+    }
+
+    &__form-container {
+        border: 1px solid #D7E2E2;
+        width: 100%;
+        max-width: 1013px;
+        margin: 0 auto;
+
+        &__header {
+            padding: 32px;
+            text-align: center;
+            border-bottom: 1px solid #D7E2E2;
+
+            @include tablet {
+                padding: 24px;
+            }
+
+            h1 {
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 36px;
+                letter-spacing: 0.42px;
+                text-transform: uppercase;
+            }
+
+            p {
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 24px;
+            }
+        }
+
+        &__content {
+            padding: 32px;
+
+            @include mobile{
+                
+            }
+
+            .stepper-container {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                gap: 23px;
+
+                @include tablet{
+                    justify-content: space-between;
+                    gap: 0;
+                }   
+                @include middle{
+                    justify-content: center;
+                    gap: 16px;
+                }   
+            }
+
+            .button-container {
+                display: flex;
+                gap: 32px;
+
+                button {
+                    padding: 16px;
+                    justify-content: center;
+                }
+            }
+        }
+    }
+}

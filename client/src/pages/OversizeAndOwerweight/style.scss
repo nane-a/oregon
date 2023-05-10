@@ -1,0 +1,56 @@
+@use '../../assets/scss/' as *;
+
+
+.oversize {
+    width: 100%;
+    min-height: calc(100vh - $header-height);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px 136px;
+    gap: 40px;
+
+    .box_two{
+        p{
+            margin-left: 36px;
+            @include mobile{
+                margin: 0;
+            }
+        }
+        ul{
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            font-weight: 500;
+            padding-left: 30px;
+            li{
+                list-style:disc;
+            }
+        }
+
+        .custom-ul{
+            gap: 16px;
+        }
+
+        .custom-p{
+            font-weight: 500;
+            margin-top: 14px;
+
+            @include mobile{
+                font-weight: 400;
+            }
+        }
+
+        .custom-div{
+            gap: 24px;
+        }
+    }
+
+    .bold {
+        font-weight: 700;
+        @include mobile{
+            font-weight: 600;
+            font-size: 16px;
+        }
+    }
+}

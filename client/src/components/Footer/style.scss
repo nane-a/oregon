@@ -1,0 +1,156 @@
+@use '../../assets/scss/' as *;
+
+.footer {
+    background-color: $main-color;
+    padding: 40px 0;
+
+    @include tablet {
+        padding: 24px 0;
+    }
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        height: 150px;
+        gap: 30px;
+
+        @include tablet {
+            flex-direction: column;
+            align-items: normal;
+            height: 100%;
+        }
+
+        .info {
+            .logo path {
+                fill: #D7E2E2 !important;
+            }
+
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-end;
+
+            @include tablet {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            @include mobile {
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            &__number {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-end;
+
+                @include mobile {
+                    flex-direction: row-reverse;
+                    justify-content: space-between;
+                    width: 100%;
+                }
+
+                .number {
+                    font-weight: 700;
+                    font-size: 23px;
+                    line-height: 24px;
+                    color: #D7E2E2;
+
+                    @include mobile {
+                        font-size: 16px;
+                        line-height: 24px;
+                        letter-spacing: 0.78px;
+                    }
+                }
+
+                .hotline {
+                    font-size: 13px;
+                    line-height: 21px;
+                    color: rgba(215, 226, 226, 0.6);
+
+                    @include mobile {
+                        font-size: 12px;
+                        line-height: 18px;
+                    }
+                }
+            }
+        }
+
+        .footer-navigation {
+            display: flex;
+            justify-content: center;
+            text-transform: uppercase;
+            letter-spacing: 0.42px;
+
+
+            @include mobile {
+                display: none;
+            }
+
+            .two {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            &__item {
+                padding: 0 24px;
+
+                &:last-child {
+                    padding-right: 0;
+                }
+
+                &:first-child {
+                    padding-left: 0;
+                }
+
+                @include tablet {
+                    padding: 0 10px;
+                }
+
+                &:not(:last-child) {
+                    border-right: 1px dashed rgba(215, 226, 226, 0.5);
+
+                }
+
+                .opacity {
+                    color: rgba(215, 226, 226, 0.5);
+
+                    @include tablet {
+                        font-size: 14px;
+                    }
+                }
+
+                .small {
+                    font-weight: 400;
+                    font-size: 13px;
+                    line-height: 14px;
+
+                    @include tablet {
+                        font-weight: 400;
+                        font-size: 10px;
+                        line-height: 15px;
+                    }
+                }
+
+                a {
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: #D7E2E2;
+
+                    @include tablet {
+                        font-weight: 400;
+                        font-size: 14px;
+                        line-height: 21px;
+                    }
+                }
+            }
+        }
+    }
+}

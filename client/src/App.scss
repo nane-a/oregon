@@ -1,0 +1,23 @@
+@use './assets/scss' as *;
+
+* {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: $font-family;
+    outline:none;
+}
+
+.container {
+    max-width: 1500px;
+    padding: 0 24px;
+    margin: auto;
+    height: 100%;
+}
+
+body{
+    overflow-x: hidden;
+}

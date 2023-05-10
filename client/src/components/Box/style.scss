@@ -1,0 +1,90 @@
+@use '../../assets/scss/' as *;
+
+
+.box {
+    width: 100%;
+    max-width: 1110px;
+    background-color: #fff;
+
+    .title {
+        padding: 24px 0;
+        text-align: center;
+        background-color: $main-color;
+        font-weight: 700;
+        font-size: 22px;
+        line-height: 32px;
+        letter-spacing: 0.78px;
+        text-transform: uppercase;
+        color: #F6F9F9;
+        position: relative;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+
+        @include mobile {
+            padding: 16px;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 24px;
+        }
+    }
+
+    .content {
+        div {
+            display: flex;
+            gap: 16px;
+            flex-direction: column;
+        }
+        padding: 32px;
+        color: #000;
+        font-size: 20px;
+        line-height: 30px;
+        letter-spacing: 0.78px;
+        background-color: #F6F9F9;
+        border: 1px solid #D7E2E2;
+        font-weight: 500;
+
+
+
+        @include tablet {
+            padding: 24px;
+        }
+
+        @include mobile {
+            padding: 16px;
+            letter-spacing: 0.42px;
+            font-size: 14px;
+            line-height: 20px;
+        }
+    }
+
+}
+
+.accordion{
+    .title{
+        padding: 26px;
+
+        button{
+            position: absolute;
+            right: 35.15px;
+            background-color: #00000000;
+            border: none;
+            display: flex;
+            align-items: center;
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+            
+
+            @include mobile{
+                svg {
+                    width: 20px;
+                    height: 20px;
+                }
+                right: 18.1px;
+            }
+        }
+    }
+}

@@ -1,0 +1,56 @@
+@use '../../assets/scss/' as *;
+
+.form-control-select {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+
+    label {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        .small {
+            font-size: 13px;
+            line-height: 21px;
+            letter-spacing: 0.42px;
+        }
+    }
+
+    select {
+        background: url('../../assets/images/select-icon.svg');
+        background-repeat: no-repeat;
+        background-position: calc(100% - 16px) center !important;
+        -moz-appearance: none !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        padding-right: 2rem !important;
+        cursor: pointer;
+    }
+
+    .select-group{
+        display: flex;
+        gap: 8px;
+    }
+
+    .input {
+        width: 100%;
+        height: 56px;
+        border: 1px solid #D7E2E2;
+        padding: 16px;
+        background-color: #F6F9F9;
+
+        @include mobile{
+            height: 36px;
+            font-size: 14px;
+        }
+    }
+
+    .error {
+        bottom: -14px;
+        right: 3px;
+        position: absolute;
+        font-size: 11px;
+        color: #F11212;
+    }
+}
