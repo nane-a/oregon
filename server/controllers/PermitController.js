@@ -1,0 +1,294 @@
+const { Contact, Truck, Route, Stops, Taxes } = require('../models');
+const calcTotalTaxes = require('../utils/calcTotalTaxes');
+const axelsNameFormator = require('../formators/axelsNameFormator');
+const formValidation = require('../utils/formValidation');
+const getStartBorderPoints = require('../utils/getStartBorderPoints');
+const getExitBorderPoints = require('../utils/getExitBorderPoints');
+const getDistance = require('../utils/getDistance');
+const stripe = require('stripe')('sk_test_51N5p4AEQYiKXYcAlHGpXBsAoHV9lq65nYPKLoOrHde7auDyWltWsh1RTXN5NCpMeDiozOvPUc9hq946Q5WslLU1u00IIR2u2la');
+const nodemailer = require('nodemailer');
+
+class PermitController {
+    contacts = async (req, res) => {
+        const phoneRegex = /^\(\d{3}\)\d{3}-\d{4}$/;
+        const { usdot, permit_starting_date, local_business_name, email_adress, phone_number } = req.body
+        let errorMessage = formValidation(req.body)
+
+        if (!errorMessage.phone_number && !phoneRegex.test(phone_number)) {
+            errorMessage.phone_number = "Invalid phone number"
+        }
+
+        try {
+            if (!Object.keys(errorMessage).length) {
+                let data
+                await Contact.findOne({ where: { usdot } })
+                    .then(async (result) => {
+                        if (result && result.draft) {
+                            data = result
+                            await Contact.update(req.body, { where: { id: result.id } })
+                        } else {
+                            data = await Contact.create(req.body)
+                        }
+                    })
+
+                res.status(200).send({
+                    success: true,
+                    data: { usdot_id: data.id, usdot, permit_starting_date, local_business_name, email_adress, phone_number },
+                    message: 'You have successfully completed the Contact form',
+                    error: null
+                })
+            } else {
+                let err = new Error('');
+                err = errorMessage;
+                throw err;
+            }
+        } catch (error) {
+            res.status(422).send({
+                success: false,
+                data: null,
+                message: 'You failed form validation',
+                error
+            })
+        }
+    };
+
+    truckData = async (req, res) => {
+        const { name_of_first_driver, name_of_second_driver, usdot_id, vin } = req.body
+        const nameRegex = /^[A-Za-z]+(?:\s+[A-Za-z]+)*$/
+        let errorMessage = formValidation(req.body, ["name_of_second_driver"])
+
+        if (!errorMessage.name_of_first_driver && !nameRegex.test(name_of_first_driver)) {
+            errorMessage.name_of_first_driver = 'Invalid name field'
+        } else if (name_of_second_driver && !errorMessage.name_of_second_driver && !nameRegex.test(name_of_second_driver)) {
+            errorMessage.name_of_second_driver = 'Invalid name field'
+        } else if (!errorMessage.vin && vin.length !== 16) {
+            errorMessage.vin = 'Invalid Vin code'
+        }
+        try {
+            if (!Object.keys(errorMessage).length) {
+                let data
+                await Truck.findOne({ where: { usdot_id } })
+                    .then(async (result) => {
+                        if (result) {
+                            data = result
+                            await Truck.update(req.body, { where: { id: result.id } })
+                        } else {
+                            data = await Truck.create(req.body)
+                        }
+                    })
+
+                res.status(200).send({
+                    success: true,
+                    data,
+                    message: `You have successfully completed the Truck form`,
+                    error: null
+                })
+            } else {
+                let err = new Error('');
+                err = errorMessage;
+                throw err;
+            }
+        } catch (error) {
+            res.status(422).send({
+                success: false,
+                data: null,
+                message: 'You failed form validation',
+                error
+            })
+        }
+    }
+
+    routeData = async (req, res) => {
+        const { stops, usdot_id, route_type, trip_type, entrance_point, exit_point } = req.body
+
+        let route;
+        let errorMessage = formValidation(req.body, ["stops", "exit_point"])
+
+        if (!exit_point && stops.length === 0) {
+            errorMessage.stop_or_exit_point = "Stop or exit point is required"
+        }
+
+        try {
+            if (!Object.keys(errorMessage).length) {
+                await Route.findOne({ where: { usdot_id } })
+                    .then(async (result) => {
+                        if (result) {
+                            route = result
+
+                            await Route.update({
+                                usdot_id,
+                                route_type,
+                                trip_type,
+                                entrance_point,
+                                exit_point
+                            }, { where: { id: result.id } })
+
+                            Stops.destroy({
+                                where: {
+                                    route_id: result.id
+                                }
+                            })
+
+                        } else {
+                            route = await Route.create({
+                                usdot_id,
+                                route_type,
+                                trip_type,
+                                entrance_point,
+                                exit_point
+                            })
+                        }
+
+                        for (let i = 0; i < stops.length; i++) {
+                            await Stops.create({ route_id: route.id, city_or_zip: stops[i].city_or_zip, service_type: stops[i].service_type })
+                        }
+                    })
+
+                res.status(200).send({
+                    success: true,
+                    data: route,
+                    message: `You have successfully completed the Route form`,
+                    error: null
+                })
+            } else {
+                let err = new Error('');
+                err = errorMessage;
+                throw err;
+            }
+        } catch (error) {
+            res.status(422).send({
+                success: false,
+                data: null,
+                message: 'You failed form validation',
+                error
+            })
+        }
+    }
+
+    getExitPoints = async (req, res) => {
+        const exitPoints = getExitBorderPoints()
+        res.status(200).send({ exitPoints })
+    }
+
+    getStartPoints = async (req, res) => {
+        const startPoints = getStartBorderPoints()
+        res.status(200).send({ startPoints })
+    }
+
+    getWeights = async (req, res) => {
+        const weights = await Taxes.findAll({ attributes: ['weight'] })
+        res.status(200).send({
+            success: true,
+            data: weights,
+            message: `Your request was successfully completed`,
+            error: null
+        })
+    }
+
+    getTotalPriceAndDistance = async (req, res) => {
+        const { usdot } = req.body
+        try {
+            const data = await Contact.findOne({ where: { usdot }, include: [{ model: Truck, attributes: ['registered_weight', "axels"] }, { model: Route, include: { model: Stops } }] })
+            const { registered_weight, axels } = data.truck
+            let { entrance_point, exit_point, stops } = data.route
+            stops.sort((a, b) => a.id - b.id)
+            const axelsName = await axelsNameFormator(axels)
+
+            let originLatArr = [entrance_point.split(", ")[0]]
+            let originLngArr = [entrance_point.split(", ")[1]]
+
+            let destLatArr = []
+            let destLngArr = []
+
+            for (let i = 0; i < stops.length; i++) {
+                originLatArr.push(stops[i].city_or_zip.split(", ")[0])
+                originLngArr.push(stops[i].city_or_zip.split(", ")[1])
+                destLatArr.push(stops[i].city_or_zip.split(", ")[0])
+                destLngArr.push(stops[i].city_or_zip.split(", ")[1])
+            }
+
+            if (exit_point) {
+                destLatArr.push(exit_point.split(", ")[0])
+                destLngArr.push(exit_point.split(", ")[1])
+            }
+
+            const apiKey = process.env.API_KEY;
+
+            const distance = await getDistance(originLatArr, originLngArr, destLatArr, destLngArr, apiKey)
+
+            const price = await calcTotalTaxes(registered_weight, axelsName, distance)
+
+            res.status(200).send({
+                success: true,
+                data: { price: +price, distance },
+                message: `Your request was successfully completed`,
+                error: null
+            })
+        }
+        catch (error) {
+            res.status(400).send({
+                success: false,
+                data: null,
+                message: `Your request was failed`,
+                error
+            })
+        }
+    }
+
+    sendPayment = async (req, res) => {
+        const { token, amount, usdot_id } = req.body
+        stripe.charges.create({
+            amount,
+            currency: 'usd',
+            source: token,
+            description: 'Oregon Truck Payment',
+        }, async (err, charge) => {
+            if (err) {
+                res.status(400).send({
+                    success: false,
+                    data: null,
+                    message: `Your payment was failed`,
+                    error: err
+                })
+            } else {
+                const user = await Contact.findOne({ where: { id: usdot_id } })
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    host: process.env.MAIL_AUTHENTICATION_HOST,
+                    port: process.env.MAIL_AUTHENTICATION_PORT,
+                    secure: false,
+                    auth: {
+                        user: process.env.MAIL_AUTHENTICATION_USER,
+                        pass: process.env.MAIL_AUTHENTICATION_PASSWORD
+                    }
+                });
+
+                let mailOptions = {
+                    from: process.env.MAIL_AUTHENTICATION_USER,
+                    to: user.email_adress,
+                    subject: 'Oregon Truck Payment',
+                    text: 'Your Payment successfully completed!'
+                };
+
+                await Contact.update({ draft: 0 }, { where: { id: usdot_id } })
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+
+                res.status(200).send({
+                    success: true,
+                    data: charge,
+                    message: `Your payment was successfully completed`,
+                    error: null
+                })
+            }
+        });
+    }
+}
+
+module.exports = new PermitController
