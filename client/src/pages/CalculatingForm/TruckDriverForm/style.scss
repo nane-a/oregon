@@ -53,56 +53,12 @@
 
                 @include mobile{
                     width: auto;
-                }
-
-                button {
-                    padding: 18px;
-                    display: flex;
-                    align-items: center;
-                    border: 1px solid #D7E2E2;
-                    background-color: #F6F9F9;
-                    cursor: pointer;
-
-                    @include mobile{
-                        padding: 8px;
-                    }
-                }
-
-                svg {
-                    width: 18px;
-                    height: 18px;
-
-                    path {
-                        fill: $main-color;
-                    }
-                }
+                }    
             }
 
             .button-delete {
                 display: flex;
                 align-items: end;
-
-                button {
-                    padding: 20px;
-                    display: flex;
-                    align-items: center;
-                    border: 1px solid #D7E2E2;
-                    background-color: #F6F9F9;
-                    cursor: pointer;
-
-                    @include mobile{
-                        padding: 10px;
-                    }
-                }
-
-                svg {
-                    width: 14px;
-                    height: 14px;
-
-                    path {
-                        fill: #F11212;
-                    }
-                }
             }
 
             .second-driver-group {

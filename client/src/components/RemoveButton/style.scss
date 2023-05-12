@@ -1,0 +1,23 @@
+@use '../../assets/scss/' as *;
+
+.buttonRemove {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #D7E2E2;
+    background-color: #F6F9F9;
+    cursor: pointer;
+
+    @include mobile {
+        padding: 10px;
+    }
+
+    svg {
+        width: 14px;
+        height: 14px;
+
+        path {
+            fill: #F11212;
+        }
+    }
+}

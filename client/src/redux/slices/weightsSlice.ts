@@ -3,7 +3,7 @@ import axios from "../../api/axios"
 import { RootState } from "../store"
 
 const initialState: {
-    data: Array<string> | null,
+    data: any | null,
     error: string | null
     isLoading: boolean
 } = {
@@ -30,7 +30,7 @@ const weightsSlice = createSlice({
             state.isLoading = true
         })
         builder.addCase(getWeights.fulfilled, (state, action: PayloadAction<any>) => {
-            state.data = action.payload
+            state.data = action.payload.data
             state.isLoading = false
         })
         builder.addCase(getWeights.rejected, (state, action: PayloadAction<any>) => {
@@ -40,6 +40,6 @@ const weightsSlice = createSlice({
     }
 })
 
-export const selectError = (state: RootState) => state.form.error
+export const selectWeightData = (state: RootState) => state.weights.data
 
 export default weightsSlice.reducer

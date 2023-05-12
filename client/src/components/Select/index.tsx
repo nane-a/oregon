@@ -7,7 +7,7 @@ interface SelectI {
     errors: any;
     required: any;
     validationSchema: any;
-    label: any;
+    label?: any;
     children: ReactNode;
     span?: any;
     handleOnChange?: any;
@@ -16,11 +16,13 @@ interface SelectI {
 
 export const Select: React.FC<SelectI> = ({ name, label, register, errors, required, validationSchema, children, span, inf }: SelectI): JSX.Element => {
     return <div className="form-control-select">
+        {label && 
         <label htmlFor={name}>
             {label}
             <span className="small">{span}</span>
             {required && "*"}
         </label>
+        }
         <div className="select-group">
             <select
                 onChange={(e) => console.log('fgdfg')}

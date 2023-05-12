@@ -4,24 +4,28 @@ import { useForm } from 'react-hook-form';
 import { Button } from '../../../components/Button'
 import { Input } from '../../../components/Input';
 import { Select } from '../../../components/Select';
-import { ReactComponent as Plus } from '../../../assets/images/plus.svg'
-import { ReactComponent as Delete } from '../../../assets/images/delete.svg'
 import { AppDispatch } from '../../../redux/store';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { TruckFormT } from '../models/calculatingForms';
-import { getWeights } from '../../../redux/slices/weightsSlice';
+import { getWeights, selectWeightData } from '../../../redux/slices/weightsSlice';
 import './style.scss'
+import { fetchTruckFormData, selectFormData } from '../../../redux/slices/formSlice';
+import { AddButton } from '../../../components/AddButton';
+import { RemoveButton } from '../../../components/RemoveButton';
 
 export const TruckDriverForm: React.FC = (): JSX.Element => {
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors }, watch } = useForm<TruckFormT>({defaultValues:{purchased_by_company:'', name_of_second_driver:''}});
+    const select = useSelector(selectFormData)
+    const weights = useSelector(selectWeightData)
+
+    const { register, handleSubmit, formState: { errors }, watch } = useForm<TruckFormT>({ defaultValues: { purchased_by_company: 'owned', name_of_second_driver: '', axels: 5 } });
 
     const [secondDriver, setSecondDriver] = useState<boolean>(false)
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getWeights())
-    },[])
+    }, [])
 
     const handleClickBack = (): void => {
         navigate('/')
@@ -29,22 +33,19 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
 
     const onSubmit = (data: TruckFormT): void => {
         console.log(data);
-        navigate('/calculating-form/route')
-        // dispatch(fetchFormDat(data))
-    }
-
-    const handleOnChange = () => {
-        console.log('dasd');
+        const usdot_id = localStorage.getItem('usdot_id')
+        if (usdot_id) dispatch(fetchTruckFormData({ ...data, usdot_id })).then((res: any) => res.payload.data.success ? navigate('/calculating-form/route') : '')
     }
 
     return (<div className='truck-form-container'>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <div className={`input-group ${secondDriver?'':'second'}`}>
+            <div className={`input-group ${secondDriver ? '' : 'second'}`}>
                 <Input
                     type="text"
                     name="name_of_first_driver"
                     label="Name Of Driver:"
                     errors={errors}
+                    errorsBack={select?.error}
                     register={register}
                     validationSchema={{
                         required: "Required"
@@ -58,18 +59,19 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                             name="name_of_second_driver"
                             label="Name of Second Driver:"
                             errors={errors}
+                            errorsBack={select?.error}
                             register={register}
                             validationSchema={{
                                 required: "Required"
                             }}
                         />
                         <div className='button-delete'>
-                            <button onClick={() => setSecondDriver(false)} type='button'><Delete /></button>
+                            <RemoveButton onClick={() => setSecondDriver(false)} type='button' />
                         </div>
                     </div>
                     :
                     <div className='button-plus'>
-                        <button onClick={() => setSecondDriver(true)} type='button'><Plus /></button>
+                        <AddButton onClick={() => setSecondDriver(true)} type='button'></AddButton>
                     </div>
                 }
             </div>
@@ -77,10 +79,11 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
             <div className='input-group'>
                 <div className='input-group'>
                     <Input
-                        type="text"
+                        type="number"
                         name="year"
                         label="Truck year:"
                         errors={errors}
+                        errorsBack={select?.error}
                         register={register}
                         validationSchema={{
                             required: "Required"
@@ -92,6 +95,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                         name="make"
                         label="Make:"
                         errors={errors}
+                        errorsBack={select?.error}
                         register={register}
                         validationSchema={{
                             required: "Required"
@@ -104,6 +108,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     name="unit"
                     label="Unit number#:"
                     errors={errors}
+                    errorsBack={select?.error}
                     register={register}
                     validationSchema={{
                         required: "Required"
@@ -117,6 +122,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     name="vin"
                     label="VIN number (17 digits):"
                     errors={errors}
+                    errorsBack={select?.error}
                     register={register}
                     validationSchema={{
                         required: "Required"
@@ -128,6 +134,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     name="license_plate_number"
                     label="License plate Number:"
                     errors={errors}
+                    errorsBack={select?.error}
                     register={register}
                     validationSchema={{
                         required: "Required"
@@ -160,7 +167,6 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                             required: "Required"
                         }}
                         required
-                        handleOnChange={handleOnChange}
                         inf={watch().apportioned_with_oregon === 'no' && <div className='tax'>50$</div>}
                     >
                         <option value="" hidden>Select one</option>
@@ -181,8 +187,9 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     required
                 >
                     <option value="" hidden>Select one</option>
-                    <option value="78,001 - 80,000">78,001 - 80,000</option>
-                    <option value="80,001 - 82,000">80,001 - 82,000</option>
+                    {weights?.data?.map((e: any, i: number) => {
+                        return <option value={e.weight} key={i}>{e.weight}</option>
+                    })}
                 </Select>
                 {+watch().registered_weight?.split(' ')[0].replaceAll(',', '') > 80000 ?
                     <Input
@@ -236,6 +243,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     name="purchased_by_company"
                     label="Leasing company name"
                     errors={errors}
+                    errorsBack={select?.error}
                     register={register}
                     validationSchema={{
                         required: "Required"
@@ -248,6 +256,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                 name="your_commodity"
                 label="What is your Commodity?"
                 errors={errors}
+                errorsBack={select?.error}
                 register={register}
                 validationSchema={{
                     required: "Required"

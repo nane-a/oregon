@@ -2,19 +2,20 @@ import { Input } from "../../components/Input"
 import { useForm } from 'react-hook-form';
 import { MainFormT } from './models/form';
 import { Button } from "../../components/Button";
-import { useDispatch } from "react-redux";
-import { fetchFormData } from "../../redux/slices/formSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFormData, selectFormData } from "../../redux/slices/formSlice";
 import { AppDispatch } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
+
 
 export const Form: React.FC = (): JSX.Element => {
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate()
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<MainFormT>();
+    const select = useSelector(selectFormData)
+    const { register, handleSubmit, formState: { errors } } = useForm<MainFormT>();
 
     const onSubmit = (data: MainFormT): void => {
-        console.log({ ...data, phone_number: phoneFormat(data.phone_number) });
-        dispatch(fetchFormData({ ...data, phone_number: phoneFormat(data.phone_number) }))
+        dispatch(fetchFormData({ ...data, phone_number: phoneFormat(data.phone_number) })).then((res: any) => res.payload.data.success && navigate('/calculating-form/truck'))
     }
 
     const phoneFormat = (phone: string): string => {
@@ -37,6 +38,7 @@ export const Form: React.FC = (): JSX.Element => {
                     name="usdot"
                     label="Your USDOT#:"
                     errors={errors}
+                    errorsBack={select?.error}
                     register={register}
                     validationSchema={{
                         required: "USDOT is required"
@@ -51,6 +53,7 @@ export const Form: React.FC = (): JSX.Element => {
                             name="permit_starting_date"
                             label="Permit starting date"
                             errors={errors}
+                            errorsBack={select?.error}
                             register={register}
                             validationSchema={{
                                 required: "Permit starting date is required"
@@ -65,6 +68,7 @@ export const Form: React.FC = (): JSX.Element => {
                             name="local_business_name"
                             label="Local business name:"
                             errors={errors}
+                            errorsBack={select?.error}
                             register={register}
                             validationSchema={{
                                 required: "Local business name is required"
@@ -79,6 +83,7 @@ export const Form: React.FC = (): JSX.Element => {
                     name="email_adress"
                     label="Email adress"
                     errors={errors}
+                    errorsBack={select?.error}
                     register={register}
                     validationSchema={{
                         required: "USDOT is required"
@@ -91,6 +96,7 @@ export const Form: React.FC = (): JSX.Element => {
                     name="phone_number"
                     label="Phone number"
                     errors={errors}
+                    errorsBack={select?.error}
                     register={register}
                     validationSchema={{
                         required: "USDOT is required"
