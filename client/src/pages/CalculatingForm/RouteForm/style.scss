@@ -1,1 +1,286 @@
 @use '../../../assets/scss/' as *;
+
+.route {
+    .step_one {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        margin-top: 32px;
+
+        p {
+            font-size: 16px;
+            line-height: 24px;
+            letter-spacing: 0.42px;
+            text-align: center
+        }
+    }
+
+    &__select-container {
+        display: flex;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 24px;
+        color: $main-color;
+        gap: 32px;
+
+        @include mobile {
+            font-weight: 600;
+            font-size: 16px;
+            flex-direction: column;
+            max-width: 230px;
+            align-self: center
+        }
+
+        .select {
+            @include flex(center, center);
+            gap: 13px;
+            width: 100%;
+            max-width: 458px;
+            padding: 168px 10px;
+            background: #F6F9F9;
+            border: 1px solid #D7E2E2;
+            text-align: center;
+
+            @include mobile {
+                padding: 100px 10px;
+            }
+        }
+
+        .selected {
+            border: 1px solid $main-color;
+        }
+
+    }
+
+    .button-container {
+        margin-top: 16px;
+
+        @include mobile {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 16px;
+            margin-top: 0;
+
+            button {
+                padding: 8px;
+            }
+        }
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        margin-top: 32px;
+
+        @include mobile {
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        h2 {
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+            letter-spacing: 0.42px;
+            color: $main-color;
+        }
+
+        p {
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+        }
+
+        .trip_type_container {
+            display: flex;
+            align-items: center;
+
+            input[type="radio"] {
+                width: 26px;
+                height: 26px;
+                margin-right: 32px;
+                accent-color: $main-color !important;
+                cursor: pointer;
+
+                @include mobile {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 8px;
+                }
+            }
+
+            label {
+                font-weight: 400;
+                font-size: 20px;
+                line-height: 30px;
+                margin-right: 40px;
+
+                @include mobile {
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+            }
+
+            .error {
+                color: #F11212;
+            }
+        }
+
+        .stops-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            &__item {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+
+                p {
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 24px;
+                }
+
+                &__radio {
+                    display: flex;
+                    align-items: center;
+
+                    input[type="radio"] {
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 16px;
+                        accent-color: $main-color !important;
+                        cursor: pointer;
+
+                        @include mobile {
+                            width: 20px;
+                            height: 20px;
+                            margin-right: 16px;
+                        }
+                    }
+
+                    label {
+                        font-weight: 400;
+                        font-size: 16px;
+                        line-height: 24px;
+                        margin-right: 32px;
+                    }
+                }
+
+                &__inp {
+                    display: flex;
+                    gap: 8px;
+
+                    input {
+                        width: 100%;
+                        height: 56px;
+                        border: 1px solid #D7E2E2;
+                        padding: 16px;
+                        background-color: #F6F9F9;
+
+                        @include mobile {
+                            height: 36px;
+                            font-size: 14px;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        .distance-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 32px;
+
+            @include mobile {
+                flex-direction: column-reverse;
+            }
+
+            button {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                align-self: flex-start;
+            }
+
+            &__exit-point {
+                display: flex;
+                gap: 32px;
+
+
+                &__select {
+                    width: 70%;
+                }
+
+                &__btns {
+                    display: flex;
+                    align-items: center;
+                    gap: 24px;
+                    min-width: 28%;
+
+                    p {
+                        font-weight: 500;
+                        font-size: 16px;
+                        line-height: 24px;
+
+                    }
+                }
+
+                @include mobile {
+                    flex-direction: column;
+                    gap: 16px;
+
+                    &__select {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .dis {
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+            }
+
+            &__distance {
+                display: flex;
+                gap: 32px;
+
+                @include mobile{
+                    flex-direction: column;
+                }
+
+                &__div {
+                    padding: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    background: #F6F9F9;
+                    border: 1px solid #D7E2E2;
+                    flex: 1;
+                    letter-spacing: 0.42px;
+                    line-height: 24px;
+
+                    p {
+                        font-weight: 400;
+                        font-size: 16px;
+                    }
+
+                    span {
+                        font-weight: 700;
+                        font-size: 24px;
+                    }
+                }
+            }
+        }
+
+        .column {
+            flex-direction: column-reverse;
+        }
+    }
+}

@@ -9,6 +9,10 @@
         padding: 40px 24px;
     }
 
+    @include tablet {
+        padding: 40px 0px;
+    }
+
     &__form-container {
         border: 1px solid #D7E2E2;
         width: 100%;
@@ -24,26 +28,41 @@
                 padding: 24px;
             }
 
+            @include mobile {
+                padding: 16px;
+            }
+
             h1 {
                 font-weight: 600;
                 font-size: 24px;
                 line-height: 36px;
                 letter-spacing: 0.42px;
                 text-transform: uppercase;
+
+                @include mobile {
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 24px;
+                }
             }
 
             p {
                 font-weight: 400;
                 font-size: 16px;
                 line-height: 24px;
+
+                @include mobile {
+                    font-size: 14px;
+                    line-height: 20px;
+                }
             }
         }
 
         &__content {
             padding: 32px;
 
-            @include mobile{
-                
+            @include mobile {
+                padding: 16px;
             }
 
             .stepper-container {
@@ -52,14 +71,15 @@
                 justify-content: center;
                 gap: 23px;
 
-                @include tablet{
+                @include tablet {
                     justify-content: space-between;
                     gap: 0;
-                }   
-                @include middle{
+                }
+
+                @include middle {
                     justify-content: center;
                     gap: 16px;
-                }   
+                }
             }
 
             .button-container {

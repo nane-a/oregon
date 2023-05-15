@@ -1,10 +1,20 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import formReducer from '../redux/slices/formSlice'
+import weightsReducer from '../redux/slices/weightsSlice'
+import pointsReducer from '../redux/slices/pointsSlice'
+import distanceReducer from '../redux/slices/distanceSlice'
 
 export const store = configureStore({
   reducer: {
-    form: formReducer
+    form: formReducer,
+    weights: weightsReducer,
+    points: pointsReducer,
+    distance: distanceReducer
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type AppDispatch = typeof store.dispatch;
