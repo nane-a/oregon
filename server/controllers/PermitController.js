@@ -5,6 +5,8 @@ const formValidation = require('../utils/formValidation');
 const getStartBorderPoints = require('../utils/getStartBorderPoints');
 const getExitBorderPoints = require('../utils/getExitBorderPoints');
 const getDistance = require('../utils/getDistance');
+const getUsStates = require('../utils/getUsStates');
+const getCanadaProvinces = require('../utils/getCanadaProvinces');
 
 class PermitController {
     contacts = async (req, res) => {
@@ -178,6 +180,26 @@ class PermitController {
         res.status(200).send({
             success: true,
             data: weights,
+            message: `Your request was successfully completed`,
+            error: null
+        })
+    }
+
+    getUsStates = async (req, res) => {
+        const usStates = getUsStates()
+        res.status(200).send({
+            success: true,
+            data: usStates,
+            message: `Your request was successfully completed`,
+            error: null
+        })
+    }
+
+    getCanadaStates = async (req, res) => {
+        const canadaProvinces = getCanadaProvinces()
+        res.status(200).send({
+            success: true,
+            data: canadaProvinces,
             message: `Your request was successfully completed`,
             error: null
         })

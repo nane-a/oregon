@@ -7,6 +7,7 @@ const sequelize = new Sequelize(DB, USER, PASSWORD, {
 });
 
 const Contact = require("./Contact")(sequelize, Sequelize)
+const Admin = require("./Admin")(sequelize, Sequelize)
 const Truck = require("./Truck")(sequelize, Sequelize)
 const Route = require("./Route")(sequelize, Sequelize)
 const Stops = require("./Stops")(sequelize, Sequelize)
@@ -40,5 +41,6 @@ module.exports = {
     Truck,
     Route,
     Stops,
-    Taxes
+    Taxes,
+    Admin
 }

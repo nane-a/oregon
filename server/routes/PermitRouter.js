@@ -8,6 +8,8 @@ permitRouter.post('/route', PermitController.routeData)
 permitRouter.get('/get-exit-points', PermitController.getExitPoints)
 permitRouter.get('/get-start-points', PermitController.getStartPoints)
 permitRouter.get('/get-weights', PermitController.getWeights)
+permitRouter.get('/get-us-states', PermitController.getUsStates)
+permitRouter.get('/get-canada-states', PermitController.getCanadaStates)
 permitRouter.post('/get-distance-and-price', PermitController.getTotalPriceAndDistance)
 
 module.exports = permitRouter
