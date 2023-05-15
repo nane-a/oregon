@@ -8,23 +8,28 @@ import { AppDispatch } from '../../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { TruckFormT } from '../models/calculatingForms';
 import { getWeights, selectWeightData } from '../../../redux/slices/weightsSlice';
-import './style.scss'
 import { fetchTruckFormData, selectFormData } from '../../../redux/slices/formSlice';
 import { AddButton } from '../../../components/AddButton';
 import { RemoveButton } from '../../../components/RemoveButton';
+import { getStatesCanada, getStatesUS, selectStatesDataCanada, selectStatesDataUS } from '../../../redux/slices/statesSlice';
+import './style.scss'
 
 export const TruckDriverForm: React.FC = (): JSX.Element => {
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate();
     const select = useSelector(selectFormData)
     const weights = useSelector(selectWeightData)
+    const statesUS = useSelector(selectStatesDataUS)
+    const statesCanada = useSelector(selectStatesDataCanada)
 
-    const { register, handleSubmit, formState: { errors }, watch } = useForm<TruckFormT>({ defaultValues: { purchased_by_company: 'owned', name_of_second_driver: '', axels: 5 } });
+    const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm<TruckFormT>({ defaultValues: { purchased_by_company: 'owned', name_of_second_driver: '', axels: 5 } });
 
     const [secondDriver, setSecondDriver] = useState<boolean>(false)
 
     useEffect(() => {
         dispatch(getWeights())
+        dispatch(getStatesUS())
+        dispatch(getStatesCanada())
     }, [])
 
     const handleClickBack = (): void => {
@@ -32,7 +37,6 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
     }
 
     const onSubmit = (data: TruckFormT): void => {
-        console.log(data);
         const usdot_id = localStorage.getItem('usdot_id')
         if (usdot_id) dispatch(fetchTruckFormData({ ...data, usdot_id })).then((res: any) => res.payload.data.success ? navigate('/calculating-form/route') : '')
     }
@@ -154,6 +158,12 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     required
                 >
                     <option value="" hidden>Select one</option>
+                    <optgroup label='US'>
+                        {statesUS}
+                    </optgroup>
+                    <optgroup label='Canada'>
+                        {statesCanada}
+                    </optgroup>
                     <option value="d">d</option>
                 </Select>
                 <div className='second-driver-group'>
@@ -265,7 +275,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
             />
             <div className='button-container'>
                 <Button variant='secondary' type='button' onClick={() => handleClickBack()}>Back</Button>
-                <Button variant='main' type='submit'>Next</Button>
+                <Button variant='main' type='submit' disabled={!isValid}>Next</Button>
             </div>
         </form>
     </div>)

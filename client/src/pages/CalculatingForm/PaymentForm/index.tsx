@@ -1,21 +1,24 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/Button'
+import { Elements } from '@stripe/react-stripe-js';
+import getStripe from '../../../setup/stripe/getStripe';
+// import { PaymentForm } from './form';
+import { useState } from 'react';
 import './style.scss'
+import { PaymentForm } from './form';
 
-export const PaymentForm: React.FC = (): JSX.Element => {
+
+
+export const Payment: React.FC = (): JSX.Element => {
     const navigate = useNavigate();
+
     const handleClickNext = (): void => {
         navigate('/calculating-form/accept')
     }
-    const handleClickBack = (): void => {
-        navigate('/calculating-form/route')
-    }
+
     return (<div className=''>
-        <form action="">
-            <div className='button-container'>
-                <Button variant='secondary' onClick={() => handleClickBack()}>Back</Button>
-                <Button variant='main' onClick={() => handleClickNext()}>Next</Button>
-            </div>
-        </form>
+        <Elements stripe={getStripe()}>
+            <PaymentForm />
+        </Elements>
     </div>)
 }

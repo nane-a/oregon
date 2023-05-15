@@ -9,6 +9,7 @@ interface ButtonI {
     children: ReactNode;
     onClick?: any;
     type?: "button" | "submit" | "reset" | undefined;
+    disabled?: boolean
 }
 
 export const Button: React.FC<ButtonI> = (props: ButtonI) => {

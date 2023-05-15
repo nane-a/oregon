@@ -1,1 +1,89 @@
 @use '../../../assets/scss/' as *;
+
+.payment-form {
+    padding: 32px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    @include mobile {
+        gap: 18px;
+        padding: 16px 0;
+    }
+
+    .price {
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 24px;
+        letter-spacing: 0.42px;
+        color: $main-color;
+        padding: 16px;
+        background: #F6F9F9;
+        border: 1px solid #D7E2E2;
+        align-self: flex-end;
+
+        @include mobile {
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 24px;
+            padding: 8px;
+        }
+    }
+
+
+    .FormGroup {
+        width: 100%;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        border: 1px solid #D7E2E2;
+        background-color: #F6F9F9;
+        padding: 20px 18px;
+
+
+        path {
+            fill: $main-color;
+        }
+
+        @include mobile {
+            height: 36px;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+    }
+
+    .error {
+        border: 1px solid #F11212;
+
+        path {
+            fill: #F11212;
+        }
+    }
+
+    .group {
+        display: flex;
+        gap: 32px;
+
+        @include mobile {
+            flex-direction: column;
+            gap: 18px;
+        }
+    }
+
+    .button-container {
+        @include mobile {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 16px;
+            margin-top: 0;
+
+            button {
+                padding: 8px;
+            }
+        }
+    }
+
+    .FormRow {
+        width: 100%;
+    }
+}

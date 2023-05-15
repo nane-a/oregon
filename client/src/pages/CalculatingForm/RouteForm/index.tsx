@@ -9,6 +9,7 @@ import { Select } from '../../../components/Select';
 import { AppDispatch } from '../../../redux/store';
 import { RemoveButton } from '../../../components/RemoveButton';
 import { AddButton } from '../../../components/AddButton';
+import { resetData } from '../../../redux/slices/distanceSlice';
 import ReactGoogleAutocomplete from 'react-google-autocomplete';
 import { ReactComponent as Exiting } from '../../../assets/images/exiting.svg'
 import { ReactComponent as Distance } from '../../../assets/images/distance.svg'
@@ -25,18 +26,21 @@ export const RouteForm: React.FC = (): JSX.Element => {
     const startPoints = useSelector(selectStartPointsData)
     const distanceAndPrice = useSelector(selectDistanceAddPrice)
 
-    const { register, handleSubmit, formState: { errors }, watch } = useForm<RouteFormT>();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<RouteFormT>();
 
     const [route_type, setRoute_type] = useState<string>()
     const [step, setStep] = useState<boolean>(true)
     const [stops, setStops] = useState<Array<{ city_or_zip: string, service_type: string }>>([{ city_or_zip: '', service_type: '' }])
+
+    const [statrPoint, setStartPoint] = useState<string>('')
+    const [startPointError, setStartPointError] = useState<boolean>(false)
 
     const [exitPointBool, setExitPointBool] = useState<boolean>(false)
     const [calculateBool, setCalculateBool] = useState<boolean>(false)
 
     const addStop = () => {
         const newStops = [...stops]
-        newStops.push({ city_or_zip: '', service_type: '' })
+        newStops.push({ city_or_zip: '', service_type: '' })  
         setStops(newStops)
     }
 
@@ -61,14 +65,22 @@ export const RouteForm: React.FC = (): JSX.Element => {
     const onSubmit = (data: RouteFormT) => {
         const usdot_id = Number(localStorage.getItem('usdot_id'))
         const usdot = localStorage.getItem('usdot')
-        if (route_type && usdot_id && usdot)
-            dispatch(fetchRouteFormData({ ...data, route_type, stops, usdot_id })).then((res: any) => res.payload.data.success ? dispatch(getDistanceAddPrice({ usdot })) : {})
+        if (statrPoint || route_type == 'ENTERING OREGON') {
+            setStartPointError(false)
+            if (route_type && usdot_id && usdot)
+                dispatch(fetchRouteFormData({ ...data, route_type, stops: [...stops.filter(e => e.city_or_zip !== '' && e.service_type != '')], usdot_id, exit_point: exitPointBool ? data.exit_point : '', entrance_point: statrPoint ? statrPoint : data.entrance_point }))
+                    .then((res: any) => res.payload.data.success ? dispatch(getDistanceAddPrice({ usdot })) : {})
+            setStartPoint('')
+        } else {
+            setStartPointError(true)
+        }
     }
 
     useEffect(() => {
         setRoute_type('')
         dispatch(getStartPoints())
         dispatch(getExitPoints())
+        dispatch(resetData())
     }, [])
 
     const handleClickBack = (): void => {
@@ -134,25 +146,19 @@ export const RouteForm: React.FC = (): JSX.Element => {
                         })}
                     </Select>
                     :
-                    <Select
-                        name="exit_point"
-                        label="Start point:"
-                        errors={errors}
-                        register={register}
-                        validationSchema={{
-                            required: "Required"
-                        }}
-                        required
-                    >
-                        <option value="" hidden>Select one</option>
-                        {exitPoints.exitPoints.map((e: any, i: number) => {
-                            return <optgroup label={e.label} key={i}>
-                                {e.options.map((opt: any, ind: number) => {
-                                    return <option value={opt.value} key={ind}>{opt.label}</option>
-                                })}
-                            </optgroup>
-                        })}
-                    </Select>
+                    <div className='starting__inp'>
+                        <label htmlFor="">Start point:</label>
+                        <ReactGoogleAutocomplete
+                            apiKey={'AIzaSyD-Work-rCSEpWMY_uzULiTe_THPGigNcQ'}
+                            onPlaceSelected={(place) => { setStartPoint(`${place.geometry.location.lat()}, ${place.geometry.location.lng()}`) }}
+                            placeholder='City or zip code'
+                            options={{
+                                componentRestrictions: { country: "us" },
+                            }}
+                            className={startPointError ? 'error' : ''}
+                        />
+                        {startPointError && <p>Require</p>}
+                    </div>
                 }
 
                 <p>Stops</p>
@@ -196,10 +202,10 @@ export const RouteForm: React.FC = (): JSX.Element => {
                             </div>}
                         </div>
                         {distanceAndPrice?.success && <div className='distance-container__distance'>
-                            <Button variant='main' width='auto' padding='16px 32px' onClick={() => setCalculateBool(true)}>Calculate<Calc /></Button>
+                            <Button variant='main' width='auto' padding='16px 32px' onClick={() => setCalculateBool(true)} type='button'>Calculate<Calc /></Button>
                             {calculateBool && <div className='distance-container__distance__price'>
                                 <div>
-                                    <p>Total Miles: {Math.round(distanceAndPrice.data.distance)}</p>
+                                    <p>Total Miles: {Math.round(distanceAndPrice.data.distance)} mi</p>
                                     <span>${distanceAndPrice.data.price}</span>
                                 </div>
                             </div>}
@@ -244,8 +250,8 @@ export const RouteForm: React.FC = (): JSX.Element => {
                     </div>
                 </div>
                 <div className='button-container'>
-                    <Button variant='secondary' type='button' onClick={() => { setStep(true); setRoute_type(''); setStops([{ city_or_zip: '', service_type: '' }]) }}>Back</Button>
-                    <Button variant='main' type='submit'>Next</Button>
+                    <Button variant='secondary' type='button' onClick={() => { setStep(true); setRoute_type(''); setStops([{ city_or_zip: '', service_type: '' }]); reset(); dispatch(resetData()) }}>Back</Button>
+                    <Button variant='main' type='button' onClick={() => distanceAndPrice?.success ? navigate('/calculating-form/payment') : ''}>Next</Button>
                 </div>
             </form>
         }

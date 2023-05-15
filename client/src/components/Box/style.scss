@@ -5,7 +5,7 @@
     width: 100%;
     max-width: 1110px;
     background-color: #fff;
-
+    
     .title {
         padding: 24px 0;
         text-align: center;
@@ -17,11 +17,10 @@
         text-transform: uppercase;
         color: #F6F9F9;
         position: relative;
-
+        
         display: flex;
         justify-content: center;
-        align-items: center;
-
+        align-items: center;        
 
         @include mobile {
             padding: 16px;
@@ -31,6 +30,9 @@
         }
     }
 
+    .click{
+        cursor: pointer;
+    }
     .content {
         div {
             display: flex;

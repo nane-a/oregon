@@ -13,11 +13,11 @@ export const Box: React.FC<BoxI> = (props: BoxI) => {
     const [isActive, setIsActive] = useState(false)
 
     return <div className={`box ${props.variant}`}>
-        <div className="title">
+        <div className={`title ${props.variant == 'accordion' && 'click'}`} onClick={() => props.variant == 'accordion' && setIsActive(!isActive)}>
             <p>{props.title}</p>
             {props.variant == 'accordion' ?
                 <>
-                    <button onClick={() => setIsActive(!isActive)}>
+                    <button>
                         {isActive ? <Minus /> : <Plus />}
                     </button>
                 </>

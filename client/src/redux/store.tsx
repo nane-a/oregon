@@ -3,13 +3,15 @@ import formReducer from '../redux/slices/formSlice'
 import weightsReducer from '../redux/slices/weightsSlice'
 import pointsReducer from '../redux/slices/pointsSlice'
 import distanceReducer from '../redux/slices/distanceSlice'
+import statesReducer from '../redux/slices/statesSlice'
 
 export const store = configureStore({
   reducer: {
     form: formReducer,
     weights: weightsReducer,
     points: pointsReducer,
-    distance: distanceReducer
+    distance: distanceReducer,
+    states: statesReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

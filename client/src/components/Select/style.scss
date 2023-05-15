@@ -10,6 +10,7 @@
         font-weight: 500;
         font-size: 16px;
         line-height: 24px;
+
         .small {
             font-size: 13px;
             line-height: 21px;
@@ -27,13 +28,13 @@
         padding-right: 2rem !important;
         cursor: pointer;
 
-        @include mobile{
+        @include mobile {
             background-position: calc(100% - 10px) center !important;
             background-size: 12px;
         }
     }
 
-    .select-group{
+    .select-group {
         display: flex;
         gap: 8px;
         width: 100%;
@@ -46,9 +47,10 @@
         padding: 16px;
         background-color: #F6F9F9;
 
-        @include mobile{
+        @include mobile {
             height: 36px;
             font-size: 14px;
+            padding: 0 16px;
         }
     }
 

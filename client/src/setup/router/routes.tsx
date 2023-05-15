@@ -8,8 +8,9 @@ import { TermsAndConditions } from '../../pages/TermsAndConditions';
 import { CalculatingForm } from '../../pages/CalculatingForm';
 import { TruckDriverForm } from '../../pages/CalculatingForm/TruckDriverForm';
 import { RouteForm } from '../../pages/CalculatingForm/RouteForm';
-import { PaymentForm } from '../../pages/CalculatingForm/PaymentForm';
-import { AcceptForm } from '../../pages/CalculatingForm/AcceptForm';
+import { Accept } from '../../pages/CalculatingForm/Accept';
+import { Payment } from '../../pages/CalculatingForm/PaymentForm';
+import { Declined } from '../../pages/CalculatingForm/Declined';
 
 export function UseRoutes() {
     let element = useRoutes([
@@ -47,11 +48,15 @@ export function UseRoutes() {
                         },
                         {
                             path: 'payment',
-                            element: <PaymentForm />
+                            element: <Payment />
                         },
                         {
                             path: 'accept',
-                            element: <AcceptForm />
+                            element: <Accept />
+                        },
+                        {
+                            path: 'declined',
+                            element: <Declined />
                         },
                     ]
                 },

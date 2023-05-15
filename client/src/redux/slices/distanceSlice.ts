@@ -31,6 +31,9 @@ const distanceSlice = createSlice({
     name: 'distance',
     initialState,
     reducers: {
+        resetData: (state) => {
+            state.data = []
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(getDistanceAddPrice.pending, (state) => {
@@ -48,5 +51,6 @@ const distanceSlice = createSlice({
 })
 
 export const selectDistanceAddPrice = (state: RootState) => state.distance.data
+export const { resetData } = distanceSlice.actions
 
 export default distanceSlice.reducer
