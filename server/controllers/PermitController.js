@@ -21,9 +21,9 @@ class PermitController {
         try {
             if (!Object.keys(errorMessage).length) {
                 let data
-                await Contact.findOne({ where: { usdot } })
+                await Contact.findOne({ where: { usdot, draft: true } })
                     .then(async (result) => {
-                        if (result && result.draft) {
+                        if (result) {
                             data = result
                             await Contact.update(req.body, { where: { id: result.id } })
                         } else {
@@ -208,9 +208,9 @@ class PermitController {
     getTotalPriceAndDistance = async (req, res) => {
         const { usdot } = req.body
         try {
-            const data = await Contact.findOne({ where: { usdot }, include: [{ model: Truck, attributes: ['registered_weight', "axels"] }, { model: Route, include: { model: Stops } }] })
-            const { registered_weight, axels } = data.truck
-            let { entrance_point, exit_point, stops } = data.route
+            const data = await Contact.findOne({ where: { id: usdot, draft: true }, include: [{ model: Truck, attributes: ['registered_weight', "axels", "apportioned_with_oregon"] }, { model: Route, include: { model: Stops } }] })
+            const { registered_weight, axels, apportioned_with_oregon } = data.truck
+            let { entrance_point, exit_point, stops, trip_type } = data.route
             stops.sort((a, b) => a.id - b.id)
             const axelsName = await axelsNameFormator(axels)
 
@@ -234,13 +234,16 @@ class PermitController {
 
             const apiKey = process.env.API_KEY;
 
-            const distance = await getDistance(originLatArr, originLngArr, destLatArr, destLngArr, apiKey)
+            let distance = await getDistance(originLatArr, originLngArr, destLatArr, destLngArr, apiKey)
 
-            const price = await calcTotalTaxes(registered_weight, axelsName, distance)
+            let price = await calcTotalTaxes(registered_weight, axelsName, distance, apportioned_with_oregon)
+
+            distance *= trip_type === 'round trip' ? 2 : 1
+            price = (trip_type === 'round trip' ? 2 : 1) * (+price)
 
             res.status(200).send({
                 success: true,
-                data: { price: +price, distance },
+                data: { price, distance },
                 message: `Your request was successfully completed`,
                 error: null
             })
