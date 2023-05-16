@@ -33,6 +33,7 @@
     .click{
         cursor: pointer;
     }
+
     .content {
         div {
             display: flex;
@@ -47,8 +48,6 @@
         background-color: #F6F9F9;
         border: 1px solid #D7E2E2;
         font-weight: 500;
-
-
 
         @include tablet {
             padding: 24px;
@@ -78,7 +77,6 @@
             width: 26px;
             height: 26px;
             cursor: pointer;
-            
 
             @include mobile{
                 svg {

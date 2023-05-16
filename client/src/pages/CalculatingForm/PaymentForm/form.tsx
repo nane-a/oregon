@@ -1,17 +1,15 @@
-import { CardNumberElement, CardCvcElement, CardExpiryElement, useStripe, useElements, Elements } from '@stripe/react-stripe-js';
-import axios from "../../../api/axios"
 import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import axios from "../../../api/axios"
+import { CardNumberElement, CardCvcElement, CardExpiryElement, useStripe, useElements, Elements } from '@stripe/react-stripe-js';
+import { Button } from '../../../components/Button';
 import { selectDistanceAddPrice } from '../../../redux/slices/distanceSlice';
 import { ReactComponent as Card } from '../../../assets/images/card.svg'
 import { ReactComponent as CVC } from '../../../assets/images/cvc.svg'
 import { ReactComponent as Date } from '../../../assets/images/date.svg'
 import { ReactComponent as Err } from '../../../assets/images/delete.svg'
 import { ReactComponent as Accept } from '../../../assets/images/accept.svg'
-import { Button } from '../../../components/Button';
-import { useNavigate } from 'react-router-dom';
-import { getStatesCanada, getStatesUS, selectStatesDataCanada, selectStatesDataUS } from '../../../redux/slices/statesSlice';
-import { AppDispatch } from '../../../redux/store';
 
 const CARD_OPTIONS: any = {
     style: {
@@ -48,7 +46,6 @@ export const PaymentForm: React.FC = (): JSX.Element => {
         if (price?.data === undefined) navigate('/calculating-form/route')
     }, [price])
 
-
     const handleSubmit = async (e: any) => {
         e.preventDefault()
         const { error } = await stripe.createPaymentMethod({
@@ -65,14 +62,11 @@ export const PaymentForm: React.FC = (): JSX.Element => {
                     usdot_id: localStorage.getItem('usdot_id')
                 })
 
-                console.log(response.data);
                 if (response.data.success) {
-                    // console.log("Successful Payment")
                     navigate('/calculating-form/accept')
                 }
 
             } catch (error) {
-                // console.log("Error", error)
                 navigate('/calculating-form/declined')
             }
         } else {

@@ -53,10 +53,10 @@
     }
 
     .error {
-        border: 1px solid #F11212;
+        border: 1px solid $error-color;
 
         path {
-            fill: #F11212;
+            fill: $error-color;
         }
     }
 

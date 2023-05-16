@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { AppDispatch } from '../../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getExitPoints, getStartPoints, selectExitPointsData, selectStartPointsData } from '../../../redux/slices/pointsSlice';
+import { getDistanceAddPrice, selectDistanceAddPrice } from '../../../redux/slices/distanceSlice';
+import { resetData } from '../../../redux/slices/distanceSlice';
+import { fetchRouteFormData } from '../../../redux/slices/formSlice';
 import { RouteFormT } from '../models/calculatingForms';
 import { Button } from '../../../components/Button'
 import { Select } from '../../../components/Select';
-import { AppDispatch } from '../../../redux/store';
 import { RemoveButton } from '../../../components/RemoveButton';
+import { Stops } from '../models/models';
 import { AddButton } from '../../../components/AddButton';
-import { resetData } from '../../../redux/slices/distanceSlice';
 import ReactGoogleAutocomplete from 'react-google-autocomplete';
 import { ReactComponent as Exiting } from '../../../assets/images/exiting.svg'
 import { ReactComponent as Distance } from '../../../assets/images/distance.svg'
 import { ReactComponent as Entering } from '../../../assets/images/entering.svg'
 import { ReactComponent as Calc } from '../../../assets/images/calc.svg'
-import { fetchRouteFormData } from '../../../redux/slices/formSlice';
-import { getDistanceAddPrice, selectDistanceAddPrice } from '../../../redux/slices/distanceSlice';
 import './style.scss'
 
 export const RouteForm: React.FC = (): JSX.Element => {
@@ -26,11 +27,11 @@ export const RouteForm: React.FC = (): JSX.Element => {
     const startPoints = useSelector(selectStartPointsData)
     const distanceAndPrice = useSelector(selectDistanceAddPrice)
 
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<RouteFormT>();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<RouteFormT>({defaultValues:{trip_type:'round trip'}});
 
     const [route_type, setRoute_type] = useState<string>()
     const [step, setStep] = useState<boolean>(true)
-    const [stops, setStops] = useState<Array<{ city_or_zip: string, service_type: string }>>([{ city_or_zip: '', service_type: '' }])
+    const [stops, setStops] = useState<Array<Stops>>([{ city_or_zip: '', service_type: 'delivery' }])
 
     const [statrPoint, setStartPoint] = useState<string>('')
     const [startPointError, setStartPointError] = useState<boolean>(false)
@@ -39,9 +40,7 @@ export const RouteForm: React.FC = (): JSX.Element => {
     const [calculateBool, setCalculateBool] = useState<boolean>(false)
 
     const addStop = () => {
-        const newStops = [...stops]
-        newStops.push({ city_or_zip: '', service_type: '' })  
-        setStops(newStops)
+        setStops([...stops, { city_or_zip: '', service_type: 'delivery' }])
     }
 
     const removeStop = (i: number) => {
@@ -68,9 +67,15 @@ export const RouteForm: React.FC = (): JSX.Element => {
         if (statrPoint || route_type == 'ENTERING OREGON') {
             setStartPointError(false)
             if (route_type && usdot_id && usdot)
-                dispatch(fetchRouteFormData({ ...data, route_type, stops: [...stops.filter(e => e.city_or_zip !== '' && e.service_type != '')], usdot_id, exit_point: exitPointBool ? data.exit_point : '', entrance_point: statrPoint ? statrPoint : data.entrance_point }))
+                dispatch(fetchRouteFormData({
+                    ...data,
+                    route_type,
+                    stops: [...stops.filter(e => e.city_or_zip !== '')],
+                    usdot_id,
+                    exit_point: exitPointBool ? data.exit_point : '',
+                    entrance_point: statrPoint ? statrPoint : data.entrance_point
+                }))
                     .then((res: any) => res.payload.data.success ? dispatch(getDistanceAddPrice({ usdot })) : {})
-            setStartPoint('')
         } else {
             setStartPointError(true)
         }
@@ -103,7 +108,7 @@ export const RouteForm: React.FC = (): JSX.Element => {
                 </div>
                 <div className='button-container'>
                     <Button variant='secondary' type='button' onClick={() => handleClickBack()}>Back</Button>
-                    <Button variant='main' type='button' onClick={() => route_type ? setStep(false) : setStep(true)}>Next</Button>
+                    <Button variant='main' type='button' onClick={() => route_type ? setStep(false) : setStep(true)} disabled={!route_type}>Next</Button>
                 </div>
             </div>
             :
@@ -116,13 +121,10 @@ export const RouteForm: React.FC = (): JSX.Element => {
                 }
 
                 <div className='trip_type_container'>
-                    <input type="radio" id='roundTrip' value='round' {...register('trip_type', { required: true })} />
+                    <input type="radio" id='roundTrip' value='round trip' {...register('trip_type', { required: true })} />
                     <label htmlFor="roundTrip">Round trip</label>
-                    <input type="radio" id='oneWay' value='oneway' {...register('trip_type', { required: true })} />
+                    <input type="radio" id='oneWay' value='oneway trip' {...register('trip_type', { required: true })} />
                     <label htmlFor="oneWay">One way trip</label>
-                    {errors && errors.trip_type?.type === "required" && (
-                        <span className="error">Required</span>
-                    )}
                 </div>
 
                 {route_type === 'ENTERING OREGON' ?
@@ -164,15 +166,27 @@ export const RouteForm: React.FC = (): JSX.Element => {
                 <p>Stops</p>
 
                 <div className='stops-container'>
-                    {stops.map((e: any, i) => {
+                    {stops.map((e: any, i: number) => {
                         return (
                             <div key={i} className='stops-container__item'>
                                 <p>{i + 1} location in Oregon</p>
 
                                 <div className='stops-container__item__radio'>
-                                    <input type="radio" id={'delivery' + i} name={'service_type' + i} value='delivery' onChange={(e) => handleChange(e, i)} />
+                                    <input
+                                        type="radio"
+                                        id={'delivery' + i}
+                                        name={'service_type' + i}
+                                        value='delivery'
+                                        onChange={(ev) => handleChange(ev, i)}
+                                        checked={e['service_type'] === 'delivery'}
+                                    />
                                     <label htmlFor={'delivery' + i}>Delivery</label>
-                                    <input type="radio" id={'pick' + i} name={'service_type' + i} value='pick' onChange={(e) => handleChange(e, i)} />
+                                    <input
+                                        type="radio"
+                                        id={'pick' + i}
+                                        name={'service_type' + i}
+                                        value='pick' onChange={(ev) => handleChange(ev, i)}
+                                    />
                                     <label htmlFor={'pick' + i}>Pick</label>
                                 </div>
 
@@ -251,7 +265,7 @@ export const RouteForm: React.FC = (): JSX.Element => {
                 </div>
                 <div className='button-container'>
                     <Button variant='secondary' type='button' onClick={() => { setStep(true); setRoute_type(''); setStops([{ city_or_zip: '', service_type: '' }]); reset(); dispatch(resetData()) }}>Back</Button>
-                    <Button variant='main' type='button' onClick={() => distanceAndPrice?.success ? navigate('/calculating-form/payment') : ''}>Next</Button>
+                    <Button variant='main' type='button' onClick={() => distanceAndPrice?.success ? navigate('/calculating-form/payment') : ''} disabled={!distanceAndPrice?.success}>Next</Button>
                 </div>
             </form>
         }

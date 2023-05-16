@@ -1,8 +1,13 @@
+import { useEffect } from 'react'
 import { Box } from '../../components/Box'
 import './style.scss'
 
 
 export const ExtendedPermit: React.FC = (): JSX.Element => {
+
+    useEffect(()=>{
+        window.scrollTo(0, 0)
+    },[])
 
     return (<div className='extended'>
         <Box variant='main' title='Over-Dimension Permit'>

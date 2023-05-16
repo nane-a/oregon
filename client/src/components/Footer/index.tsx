@@ -1,6 +1,6 @@
-import './style.scss'
-import { ReactComponent as Logo } from '../../assets/images/logo.svg'
 import { Link } from 'react-router-dom'
+import { ReactComponent as Logo } from '../../assets/images/logo.svg'
+import './style.scss'
 
 export const Footer: React.FC = (): JSX.Element => {
     return (<div className='footer'>

@@ -1,14 +1,14 @@
+import { useEffect } from 'react';
 import { Form } from './Form';
 import map from '../../assets/images/map-img.png'
 import './style.scss'
-import { useEffect } from 'react';
 
 
 export const Home: React.FC = (): JSX.Element => {
 
-    useEffect(()=>{
+    useEffect(() => {
         window.scrollTo(0, 0)
-    },[])
+    }, [])
 
     return (<div className='home'>
         <section className='section_one'>

@@ -1,17 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
+import { getStatesCanada, getStatesUS, selectStatesDataCanada, selectStatesDataUS } from '../../../redux/slices/statesSlice';
+import { fetchTruckFormData, selectFormData } from '../../../redux/slices/formSlice';
+import { getWeights, selectWeightData } from '../../../redux/slices/weightsSlice';
+import { TruckFormT } from '../models/calculatingForms';
 import { Button } from '../../../components/Button'
 import { Input } from '../../../components/Input';
 import { Select } from '../../../components/Select';
-import { AppDispatch } from '../../../redux/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { TruckFormT } from '../models/calculatingForms';
-import { getWeights, selectWeightData } from '../../../redux/slices/weightsSlice';
-import { fetchTruckFormData, selectFormData } from '../../../redux/slices/formSlice';
 import { AddButton } from '../../../components/AddButton';
 import { RemoveButton } from '../../../components/RemoveButton';
-import { getStatesCanada, getStatesUS, selectStatesDataCanada, selectStatesDataUS } from '../../../redux/slices/statesSlice';
 import './style.scss'
 
 export const TruckDriverForm: React.FC = (): JSX.Element => {
@@ -71,6 +71,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                         />
                         <div className='button-delete'>
                             <RemoveButton onClick={() => setSecondDriver(false)} type='button' />
+                            <RemoveButton variant='min' onClick={() => setSecondDriver(false)} type='button' />
                         </div>
                     </div>
                     :
@@ -90,9 +91,12 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                         errorsBack={select?.error}
                         register={register}
                         validationSchema={{
-                            required: "Required"
+                            required: "Required",
+                            min: 1886,
+                            max: new Date().getFullYear()  
                         }}
                         required
+                        
                     />
                     <Input
                         type="text"
@@ -122,7 +126,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
             </div>
             <div className='input-group'>
                 <Input
-                    type="text"
+                    type="number"
                     name="vin"
                     label="VIN number (17 digits):"
                     errors={errors}
@@ -134,7 +138,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     required
                 />
                 <Input
-                    type="text"
+                    type="number"
                     name="license_plate_number"
                     label="License plate Number:"
                     errors={errors}
@@ -159,12 +163,19 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                 >
                     <option value="" hidden>Select one</option>
                     <optgroup label='US'>
-                        {statesUS}
+                        {statesUS?.data.map((e: any, i: number) => {
+                            return (
+                                <option value={e.value} key={i}>{e.label}</option>
+                            )
+                        })}
                     </optgroup>
                     <optgroup label='Canada'>
-                        {statesCanada}
+                        {statesCanada?.data.map((e: any, i: number) => {
+                            return (
+                                <option value={e.value} key={i}>{e.label}</option>
+                            )
+                        })}
                     </optgroup>
-                    <option value="d">d</option>
                 </Select>
                 <div className='second-driver-group'>
                     <Select
@@ -275,7 +286,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
             />
             <div className='button-container'>
                 <Button variant='secondary' type='button' onClick={() => handleClickBack()}>Back</Button>
-                <Button variant='main' type='submit' disabled={!isValid}>Next</Button>
+                <Button variant='main' type='submit'>Next</Button>
             </div>
         </form>
     </div>)

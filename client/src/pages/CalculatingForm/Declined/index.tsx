@@ -1,7 +1,7 @@
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/Button'
 import { ReactComponent as Decline } from '../../../assets/images/declined.svg'
 import './style.scss'
-import { useNavigate } from 'react-router-dom'
 
 export const Declined: React.FC = (): JSX.Element => {
     const navigate = useNavigate()

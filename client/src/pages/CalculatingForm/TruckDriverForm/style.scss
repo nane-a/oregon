@@ -1,7 +1,7 @@
 @use '../../../assets/scss/' as *;
 
 .truck-form-container {
-    
+
     form {
         display: flex;
         flex-direction: column;
@@ -26,12 +26,13 @@
         .button-container {
             margin-top: 16px;
 
-            @include mobile{
+            @include mobile {
                 display: flex;
                 flex-direction: column-reverse;
                 gap: 16px;
                 margin-top: 0;
-                button{
+
+                button {
                     padding: 8px;
                 }
             }
@@ -44,6 +45,7 @@
 
             @include mobile {
                 flex-direction: column;
+                gap: 8px;
             }
 
             .button-plus {
@@ -51,20 +53,38 @@
                 display: flex;
                 align-items: end;
 
-                @include mobile{
+                @include mobile {
                     width: auto;
-                }    
+                }
             }
 
             .button-delete {
                 display: flex;
                 align-items: end;
+
+                button:last-child {
+                    display: none;
+                }
+
+                @include mobile {
+                    button:last-child {
+                        display: flex;
+                    }
+
+                    button:first-child {
+                        display: none;
+                    }
+                }
             }
 
             .second-driver-group {
                 width: 100%;
                 display: flex;
                 gap: 16px;
+
+                @include mobile {
+                    gap: 8px;
+                }
 
                 .tax {
                     display: flex;
@@ -94,8 +114,8 @@
             }
         }
 
-        @include mobile{
-            .second{
+        @include mobile {
+            .second {
                 display: flex;
                 flex-direction: row;
             }

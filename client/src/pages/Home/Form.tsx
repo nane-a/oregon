@@ -1,11 +1,11 @@
-import { Input } from "../../components/Input"
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { fetchFormData, selectFormData } from "../../redux/slices/formSlice";
 import { useForm } from 'react-hook-form';
 import { MainFormT } from './models/form';
+import { Input } from "../../components/Input"
 import { Button } from "../../components/Button";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchFormData, selectFormData } from "../../redux/slices/formSlice";
-import { AppDispatch } from "../../redux/store";
-import { useNavigate } from "react-router-dom";
 
 
 export const Form: React.FC = (): JSX.Element => {
@@ -15,7 +15,8 @@ export const Form: React.FC = (): JSX.Element => {
     const { register, handleSubmit, formState: { errors } } = useForm<MainFormT>();
 
     const onSubmit = (data: MainFormT): void => {
-        dispatch(fetchFormData({ ...data, phone_number: phoneFormat(data.phone_number) })).then((res: any) => res.payload.data.success && navigate('/calculating-form/truck'))
+        dispatch(fetchFormData({ ...data, phone_number: phoneFormat(data.phone_number) }))
+            .then((res: any) => res.payload.data.success && navigate('/calculating-form/truck'))
     }
 
     const phoneFormat = (phone: string): string => {
@@ -86,7 +87,7 @@ export const Form: React.FC = (): JSX.Element => {
                     errorsBack={select?.error}
                     register={register}
                     validationSchema={{
-                        required: "USDOT is required"
+                        required: "Email is required"
                     }}
                     required
                     placeholder="e. g. example@example.com"
@@ -99,7 +100,7 @@ export const Form: React.FC = (): JSX.Element => {
                     errorsBack={select?.error}
                     register={register}
                     validationSchema={{
-                        required: "USDOT is required"
+                        required: "Number is required"
                     }}
                     required
                     placeholder="e. g. (307) 721-8848"

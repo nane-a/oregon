@@ -41,9 +41,8 @@
             background: #F6F9F9;
             border: 1px solid #D7E2E2;
             text-align: center;
-
+            cursor: pointer;
            
-
             @include mobile {
                 padding: 100px 10px;
             }
@@ -123,11 +122,11 @@
                 right: 0px;
                 position: absolute;
                 font-size: 11px;
-                color: #F11212;
+                color: $error-color;
             }
 
             .error {
-                border: 1px solid #F11212;
+                border: 1px solid $error-color;
             }
         }
 
@@ -163,7 +162,7 @@
             }
 
             .error {
-                color: #F11212;
+                color: $error-color;
             }
         }
 
@@ -237,6 +236,7 @@
 
             @include mobile {
                 flex-direction: column-reverse;
+                gap: 16px;
             }
 
             button {
@@ -266,6 +266,11 @@
                         font-size: 16px;
                         line-height: 24px;
 
+                    }
+
+                    @include mobile{
+                        flex-direction: row-reverse;
+                        justify-content: start;
                     }
                 }
 
@@ -385,4 +390,3 @@
         }
     }
 }
-

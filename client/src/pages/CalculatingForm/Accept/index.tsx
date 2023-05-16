@@ -1,7 +1,7 @@
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/Button'
 import { ReactComponent as Received } from '../../../assets/images/received.svg'
 import './style.scss'
-import { useNavigate } from 'react-router-dom'
 
 export const Accept: React.FC = (): JSX.Element => {
     const navigate = useNavigate()

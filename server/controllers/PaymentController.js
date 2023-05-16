@@ -1,5 +1,5 @@
 const { Contact } = require('../models');
-const stripe = require('stripe')('sk_test_51N5p4AEQYiKXYcAlHGpXBsAoHV9lq65nYPKLoOrHde7auDyWltWsh1RTXN5NCpMeDiozOvPUc9hq946Q5WslLU1u00IIR2u2la');
+const stripe = require('stripe')('sk_test_51N6qlXB6vEmDvOeAb7bl3Pr8GQ5SRu0dczUug974dwx3YwmWDcwo3lahBkMwMpNvFmM4BWi88yxrOgMK4ySsjd9V00Symc3jfE');
 const nodemailer = require('nodemailer');
 
 class PermitController {

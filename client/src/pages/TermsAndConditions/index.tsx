@@ -1,14 +1,20 @@
+import { useEffect } from 'react'
 import { Box } from '../../components/Box'
 import './style.scss'
 
 
 export const TermsAndConditions: React.FC = (): JSX.Element => {
+    
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+
     return (<div className='terms'>
         <div className='greetings'>
             <h1>Terms and conditions</h1>
             <div>
-            <p>The following Terms and Conditions shall be incorporated by reference into and made part of any order submitted through Oregon Permit Tax (hence referred to as the “Company”).</p>            <p>This contract is between the Company and customers working with commercial vehicles
-            (hence referred to as the “Customer”).</p>
+                <p>The following Terms and Conditions shall be incorporated by reference into and made part of any order submitted through Oregon Permit Tax (hence referred to as the “Company”).</p>            <p>This contract is between the Company and customers working with commercial vehicles
+                    (hence referred to as the “Customer”).</p>
             </div>
         </div>
         <Box variant='accordion' title='Services'>
