@@ -208,7 +208,7 @@ class PermitController {
     getTotalPriceAndDistance = async (req, res) => {
         const { usdot } = req.body
         try {
-            const data = await Contact.findOne({ where: { id: usdot }, include: [{ model: Truck, attributes: ['registered_weight', "axels", "apportioned_with_oregon"] }, { model: Route, include: { model: Stops } }] })
+            const data = await Contact.findOne({ where: { id: usdot, draft: true }, include: [{ model: Truck, attributes: ['registered_weight', "axels", "apportioned_with_oregon"] }, { model: Route, include: { model: Stops } }] })
             const { registered_weight, axels, apportioned_with_oregon } = data.truck
             let { entrance_point, exit_point, stops, trip_type } = data.route
             stops.sort((a, b) => a.id - b.id)
