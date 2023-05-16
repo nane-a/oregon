@@ -1,16 +1,16 @@
 const express = require('express')
-const AdminRouter = require('../controllers/AdminController')
+const AdminController = require('../controllers/AdminController')
 const Auth = require('../middlewares/Auth')
 const passport = require('passport')
 const adminRouter = express.Router()
 
 // for admin creating
-// adminRouter.post('/admin-register', AdminRouter.register)
+// adminRouter.post('/admin-register', AdminController.register)
 
 adminRouter.get(
     "/loggedUser",
     passport.authenticate("jwt", { session: false }),
-    AdminRouter.loggedUser
+    AdminController.loggedUser
 );
 
 adminRouter.post(
@@ -18,13 +18,13 @@ adminRouter.post(
     passport.authenticate("local", {
         session: false,
     }),
-    AdminRouter.login
+    AdminController.login
 );
 
-adminRouter.post("/drivers", Auth(), AdminRouter.getDrivers)
-adminRouter.post("/taxes", Auth(), AdminRouter.getTaxes)
-adminRouter.post("/delete-driver", Auth(), AdminRouter.deleteDriver)
-adminRouter.post("/about-driver", Auth(), AdminRouter.aboutDriver)
-adminRouter.get("/logout", Auth(), AdminRouter.logoutUser)
+adminRouter.post("/drivers", Auth(), AdminController.getDrivers)
+adminRouter.post("/taxes", Auth(), AdminController.getTaxes)
+adminRouter.post("/delete-driver", Auth(), AdminController.deleteDriver)
+adminRouter.post("/about-driver", Auth(), AdminController.aboutDriver)
+adminRouter.get("/logout", Auth(), AdminController.logoutUser)
 
 module.exports = adminRouter

@@ -208,8 +208,8 @@ class PermitController {
     getTotalPriceAndDistance = async (req, res) => {
         const { usdot } = req.body
         try {
-            const data = await Contact.findOne({ where: { usdot }, include: [{ model: Truck, attributes: ['registered_weight', "axels"] }, { model: Route, include: { model: Stops } }] })
-            const { registered_weight, axels } = data.truck
+            const data = await Contact.findOne({ where: { usdot }, include: [{ model: Truck, attributes: ['registered_weight', "axels", "apportioned_with_oregon"] }, { model: Route, include: { model: Stops } }] })
+            const { registered_weight, axels, apportioned_with_oregon } = data.truck
             let { entrance_point, exit_point, stops } = data.route
             stops.sort((a, b) => a.id - b.id)
             const axelsName = await axelsNameFormator(axels)
@@ -236,7 +236,7 @@ class PermitController {
 
             const distance = await getDistance(originLatArr, originLngArr, destLatArr, destLngArr, apiKey)
 
-            const price = await calcTotalTaxes(registered_weight, axelsName, distance)
+            const price = await calcTotalTaxes(registered_weight, axelsName, distance, apportioned_with_oregon)
 
             res.status(200).send({
                 success: true,

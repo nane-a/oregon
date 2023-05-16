@@ -12,6 +12,7 @@ const Truck = require("./Truck")(sequelize, Sequelize)
 const Route = require("./Route")(sequelize, Sequelize)
 const Stops = require("./Stops")(sequelize, Sequelize)
 const Taxes = require("./Taxes")(sequelize, Sequelize)
+const Chat = require("./Chat")(sequelize, Sequelize)
 
 Contact.hasOne(Truck, {
     foreignKey: 'usdot_id',
@@ -42,5 +43,6 @@ module.exports = {
     Route,
     Stops,
     Taxes,
-    Admin
+    Admin,
+    Chat
 }

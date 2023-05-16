@@ -69,7 +69,6 @@ class AdminController {
                 error
             })
         }
-
     }
 
     getTaxes = async (req, res) => {
