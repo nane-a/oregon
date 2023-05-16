@@ -57,6 +57,33 @@ class ChatController {
             })
         }
     }
+
+    openChat = async (req, res) => {
+        try {
+            let chats = await Chat.findAll({
+                where: {
+                    [Op.or]: [
+                        { from: req.body.usdot },
+                        { to: req.body.usdot },
+                    ]
+                }
+            })
+
+            res.status(200).send({
+                success: true,
+                data: chats,
+                message: `Your request was successfully completed`,
+                error: null
+            })
+        } catch (error) {
+            res.status(400).send({
+                success: false,
+                data: null,
+                message: `Your request was failed`,
+                error
+            })
+        }
+    }
 }
 
 module.exports = new ChatController
