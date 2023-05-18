@@ -2,25 +2,6 @@ const { Op } = require("sequelize")
 const { Chat } = require("../models")
 
 class ChatController {
-    sendMessage = async (req, res) => {
-        try {
-            await Chat.create(req.body)
-            res.status(200).send({
-                success: true,
-                data: null,
-                message: `Your request was successfully completed`,
-                error: null
-            })
-        } catch (error) {
-            res.status(400).send({
-                success: false,
-                data: null,
-                message: `Your request was failed`,
-                error
-            })
-        }
-    }
-
     getMessages = async (req, res) => {
         try {
             let chats = await Chat.findAll({

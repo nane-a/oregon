@@ -3,12 +3,28 @@ const stripe = require('stripe')('sk_test_51N6qlXB6vEmDvOeAb7bl3Pr8GQ5SRu0dczUug
 const nodemailer = require('nodemailer');
 
 class PermitController {
+    showList = async (req, res) => {
+        await stripe.charges.list((err, payments) => {
+            if (err) {
+                console.error(err);
+            } else {
+                res.send(payments.data)
+            }
+        });
+    }
+
     sendPayment = async (req, res) => {
         const { token, amount, usdot_id } = req.body
-        stripe.charges.create({
+        const customer = await stripe.customers.create({
+            email: 'customer@example.com',
+            name: 'John Doe',
+            description: 'New customer'
+        })
+        await stripe.charges.create({
             amount,
             currency: 'usd',
             source: token,
+            customer: customer.id,
             description: 'Oregon Truck Payment',
         }, async (err, charge) => {
             if (err) {
