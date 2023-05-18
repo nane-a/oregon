@@ -30,7 +30,7 @@ export const Box: React.FC<BoxI> = (props: BoxI) => {
             {props.children}
         </div>}
 
-        {isActive && <div className="content">
+        {isActive && <div className="content scale-in-ver-top">
             {props.children}
         </div>}
     </div>

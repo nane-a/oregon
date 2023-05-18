@@ -9,10 +9,12 @@
     @include tablet {
         height: $header-height-tablet
     }
+
     @include mobile {
         height: $header-height-mobile;
         border-bottom: 1px solid #D7E2E2;
-        .container{
+
+        .container {
             padding: 0 16px;
         }
     }
@@ -41,6 +43,7 @@
                     @include mobile {
                         height: 24px;
                     }
+
                     cursor: pointer;
                 }
             }
@@ -93,10 +96,10 @@
                 gap: 25px;
                 height: 100%;
 
-                li{
+                li {
                     height: 100%;
                 }
-                
+
                 .header-link {
                     @include flex(center, center);
                     height: 100%;
@@ -106,9 +109,10 @@
                     color: #231F20;
                     letter-spacing: 0.42px;
                 }
-                
+
                 .dropdown-link {
                     position: relative;
+
                     &:hover .dropdown {
                         display: flex;
                     }
@@ -128,7 +132,7 @@
                     z-index: 100;
                     border: 1px solid #D7E2E2;
 
-                    .header-link{
+                    .header-link {
                         display: block;
 
                     }
@@ -140,13 +144,36 @@
             }
         }
 
-        .sidebar-btn{
+
+        .buttons {
             display: none;
-            background-color: #231f2000;
-            border: none;
-            cursor: pointer;
+            gap: 16px;
+            align-items: center;
+
+            .sidebar-btn {
+                display: none;
+                background-color: #231f2000;
+                border: none;
+                cursor: pointer;
+
+                @include tablet {
+                    display: block;
+                }
+            }
+
+            .material-symbols-outlined {
+                font-size: 30px;
+                margin-top: 4px;
+                color: $main-color;
+                font-variation-settings:
+                    'FILL' 1,
+                    'wght' 500,
+                    'GRAD' 0,
+                    'opsz' 48
+            }
+
             @include tablet{
-                display: block;
+                display: flex;
             }
         }
     }

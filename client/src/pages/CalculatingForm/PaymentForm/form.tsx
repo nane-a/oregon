@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from "../../../api/axios"
 import { CardNumberElement, CardCvcElement, CardExpiryElement, useStripe, useElements, Elements } from '@stripe/react-stripe-js';
 import { Button } from '../../../components/Button';
@@ -10,6 +10,8 @@ import { ReactComponent as CVC } from '../../../assets/images/cvc.svg'
 import { ReactComponent as Date } from '../../../assets/images/date.svg'
 import { ReactComponent as Err } from '../../../assets/images/delete.svg'
 import { ReactComponent as Accept } from '../../../assets/images/accept.svg'
+import { fetchPaymentFormData } from "../../../redux/slices/formSlice";
+import { AppDispatch } from "../../../redux/store";
 
 const CARD_OPTIONS: any = {
     style: {
@@ -32,6 +34,7 @@ export const PaymentForm: React.FC = (): JSX.Element => {
     const navigate = useNavigate()
     const stripe: any = useStripe()
     const elements: any = useElements()
+    const dispatch = useDispatch<AppDispatch>()
 
     const price = useSelector(selectDistanceAddPrice)
     const [cardValidation, setCardValidation] = useState<any>()
@@ -54,21 +57,9 @@ export const PaymentForm: React.FC = (): JSX.Element => {
         })
 
         if (!error) {
-            try {
-                const response = await axios.post("payment/send-payment", {
-                    amount: Math.round(price.data.price * 100),
-                    // token: 'tok_visa_chargeDeclined',
-                    token: 'tok_visa',
-                    usdot_id: localStorage.getItem('usdot_id')
-                })
-
-                if (response.data.success) {
-                    navigate('/calculating-form/accept')
-                }
-
-            } catch (error) {
-                navigate('/calculating-form/declined')
-            }
+            dispatch(fetchPaymentFormData(price.data.price))
+                .then((res: any) => res.payload.data.success && navigate('/calculating-form/accept'))
+                .catch(e => navigate('/calculating-form/declined'))
         } else {
             console.log(error);
         }

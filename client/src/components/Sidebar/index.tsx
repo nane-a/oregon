@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import phoneIcon from '../../assets/images/phone-icon.png'
 import './style.scss'
+import { HashLink } from 'react-router-hash-link';
 
 interface SidebarI {
     isOpen: boolean;
@@ -25,7 +26,7 @@ export const Sidebar: React.FC<SidebarI> = (props: SidebarI): JSX.Element => {
                     <Link to={'/extended-permit'} className='small' onClick={() => props.toggle()}>fOR EXTENDED PERMIT</Link>
                 </div>
                 <div className='sidebar__navigation__item'>
-                    <Link to={'/'} onClick={() => props.toggle()}>good to know</Link>
+                    <HashLink smooth to={'/#good_to_know'} onClick={() => props.toggle()}>good to know</HashLink>
                 </div>
                 <div className='sidebar__navigation__item'>
                     <Link to={'/terms-and-conditions'} onClick={() => props.toggle()}>Terms and conditions</Link>

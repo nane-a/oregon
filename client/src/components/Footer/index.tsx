@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import { ReactComponent as Logo } from '../../assets/images/logo.svg'
 import './style.scss'
+import { HashLink } from 'react-router-hash-link'
 
 export const Footer: React.FC = (): JSX.Element => {
     return (<div className='footer'>
         <div className='footer__container container'>
             <div className='info'>
-                <Logo className='logo'/>
+                <Logo className='logo' />
                 <div className='info__number'>
                     <p className='number'>503 8626399</p>
                     <p className='hotline'>24/7 Hotline</p>
@@ -14,7 +15,7 @@ export const Footer: React.FC = (): JSX.Element => {
             </div>
             <div className='footer-navigation'>
                 <div className='footer-navigation__item'>
-                    <Link to={'/'}>Home</Link>
+                    <Link to={'/'} onClick={()=>{ window.scrollTo(0,0)}}>Home</Link>
                 </div>
                 <div className='footer-navigation__item two'>
                     <p className='opacity'>oVERSIZE AND extended PERMITS</p>
@@ -22,7 +23,7 @@ export const Footer: React.FC = (): JSX.Element => {
                     <Link to={'/extended-permit'} className='small'>fOR EXTENDED PERMIT</Link>
                 </div>
                 <div className='footer-navigation__item'>
-                    <Link to={'/'}>good to know</Link>
+                    <HashLink smooth to={'/#good_to_know'} className='header-link'>good to know</HashLink>
                 </div>
                 <div className='footer-navigation__item'>
                     <Link to={'/'}>Contact US</Link>

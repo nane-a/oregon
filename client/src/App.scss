@@ -9,13 +9,19 @@
     -webkit-tap-highlight-color: transparent;
     font-family: $font-family;
     outline: none;
+
 }
+
 
 .container {
     max-width: 1500px;
     padding: 0 24px;
     margin: auto;
     height: 100%;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -43,4 +49,18 @@ select {
         font-size: 14px;
         line-height: 20px;
     }
+
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $main-color;
+        border-radius: 5px;
+    }
+
 }

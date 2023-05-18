@@ -12,7 +12,10 @@ export const Form: React.FC = (): JSX.Element => {
     const dispatch = useDispatch<AppDispatch>()
     const navigate = useNavigate()
     const select = useSelector(selectFormData)
-    const { register, handleSubmit, formState: { errors } } = useForm<MainFormT>();
+
+    console.log(select);
+    
+    const { register, handleSubmit, formState: { errors } } = useForm<MainFormT>({defaultValues: select?.contacts?.data});
 
     const onSubmit = (data: MainFormT): void => {
         dispatch(fetchFormData({ ...data, phone_number: phoneFormat(data.phone_number) }))
@@ -39,7 +42,7 @@ export const Form: React.FC = (): JSX.Element => {
                     name="usdot"
                     label="Your USDOT#:"
                     errors={errors}
-                    errorsBack={select?.error}
+                    errorsBack={select?.contacts?.error}
                     register={register}
                     validationSchema={{
                         required: "USDOT is required"
@@ -54,7 +57,7 @@ export const Form: React.FC = (): JSX.Element => {
                             name="permit_starting_date"
                             label="Permit starting date"
                             errors={errors}
-                            errorsBack={select?.error}
+                            errorsBack={select?.contacts?.error}
                             register={register}
                             validationSchema={{
                                 required: "Permit starting date is required"
@@ -69,7 +72,7 @@ export const Form: React.FC = (): JSX.Element => {
                             name="local_business_name"
                             label="Local business name:"
                             errors={errors}
-                            errorsBack={select?.error}
+                            errorsBack={select?.contacts?.error}
                             register={register}
                             validationSchema={{
                                 required: "Local business name is required"
@@ -84,7 +87,7 @@ export const Form: React.FC = (): JSX.Element => {
                     name="email_adress"
                     label="Email adress"
                     errors={errors}
-                    errorsBack={select?.error}
+                    errorsBack={select?.contacts?.error}
                     register={register}
                     validationSchema={{
                         required: "Email is required"
@@ -97,7 +100,7 @@ export const Form: React.FC = (): JSX.Element => {
                     name="phone_number"
                     label="Phone number"
                     errors={errors}
-                    errorsBack={select?.error}
+                    errorsBack={select?.contacts?.error}
                     register={register}
                     validationSchema={{
                         required: "Number is required"

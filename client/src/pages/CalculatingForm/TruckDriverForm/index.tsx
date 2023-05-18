@@ -22,7 +22,10 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
     const statesUS = useSelector(selectStatesDataUS)
     const statesCanada = useSelector(selectStatesDataCanada)
 
-    const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm<TruckFormT>({ defaultValues: { purchased_by_company: 'owned', name_of_second_driver: '', axels: 5 } });
+    console.log(select);
+    
+
+    const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm<TruckFormT>({ defaultValues: select?.truck?.data || { purchased_by_company: 'owned', name_of_second_driver: '', axels: 5 } });
 
     const [secondDriver, setSecondDriver] = useState<boolean>(false)
 
@@ -49,7 +52,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     name="name_of_first_driver"
                     label="Name Of Driver:"
                     errors={errors}
-                    errorsBack={select?.error}
+                    errorsBack={select?.truck?.error}
                     register={register}
                     validationSchema={{
                         required: "Required"
@@ -57,13 +60,13 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     required
                 />
                 {secondDriver ?
-                    <div className='second-driver-group'>
+                    <div className='second-driver-group scale-up-hor-left'>
                         <Input
                             type="text"
                             name="name_of_second_driver"
                             label="Name of Second Driver:"
                             errors={errors}
-                            errorsBack={select?.error}
+                            errorsBack={select?.truck?.error}
                             register={register}
                             validationSchema={{
                                 required: "Required"
@@ -88,7 +91,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                         name="year"
                         label="Truck year:"
                         errors={errors}
-                        errorsBack={select?.error}
+                        errorsBack={select?.truck?.error}
                         register={register}
                         validationSchema={{
                             required: "Required",
@@ -103,7 +106,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                         name="make"
                         label="Make:"
                         errors={errors}
-                        errorsBack={select?.error}
+                        errorsBack={select?.truck?.error}
                         register={register}
                         validationSchema={{
                             required: "Required"
@@ -116,7 +119,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     name="unit"
                     label="Unit number#:"
                     errors={errors}
-                    errorsBack={select?.error}
+                    errorsBack={select?.truck?.error}
                     register={register}
                     validationSchema={{
                         required: "Required"
@@ -130,7 +133,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     name="vin"
                     label="VIN number (17 digits):"
                     errors={errors}
-                    errorsBack={select?.error}
+                    errorsBack={select?.truck?.error}
                     register={register}
                     validationSchema={{
                         required: "Required"
@@ -142,7 +145,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     name="license_plate_number"
                     label="License plate Number:"
                     errors={errors}
-                    errorsBack={select?.error}
+                    errorsBack={select?.truck?.error}
                     register={register}
                     validationSchema={{
                         required: "Required"
@@ -264,7 +267,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                     name="purchased_by_company"
                     label="Leasing company name"
                     errors={errors}
-                    errorsBack={select?.error}
+                    errorsBack={select?.truck?.error}
                     register={register}
                     validationSchema={{
                         required: "Required"
@@ -277,7 +280,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                 name="your_commodity"
                 label="What is your Commodity?"
                 errors={errors}
-                errorsBack={select?.error}
+                errorsBack={select?.truck?.error}
                 register={register}
                 validationSchema={{
                     required: "Required"

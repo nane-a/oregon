@@ -46,7 +46,7 @@ const statesSlice = createSlice({
         })
         builder.addCase(getStatesUS.rejected, (state, action: PayloadAction<any>) => {
             state.error = action.payload
-            state.isLoading = true
+            state.isLoading = false
         })
 
         //Canada
@@ -59,7 +59,7 @@ const statesSlice = createSlice({
         })
         builder.addCase(getStatesCanada.rejected, (state, action: PayloadAction<any>) => {
             state.error = action.payload
-            state.isLoading = true
+            state.isLoading = false
         })
     }
 })

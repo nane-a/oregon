@@ -1,26 +1,34 @@
 import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom'
+import { HashLink } from 'react-router-hash-link'
 import { Button } from '../Button'
 import { Sidebar } from '../Sidebar'
 import { ReactComponent as Icon } from '../../assets/images/side-bar-icon.svg'
 import phoneIcon from '../../assets/images/phone-icon.png'
 import logo from '../../assets/images/logo.svg'
 import './style.scss'
+import { Chat } from "../Chat";
 
 export const Navbar: React.FC = (): JSX.Element => {
     const [isOpen, setIsOpen] = useState(false)
+    const [isChatOpen, setIsChatOpen] = useState(false)
     const navigate = useNavigate()
 
     const toggle = () => {
         setIsOpen(!isOpen);
-        document.body.style.overflow = isOpen?'scroll':'hidden'
+        document.body.style.overflowY = isOpen ? 'scroll' : 'hidden'
     };
+
+    const toggleChat = () => {
+        setIsChatOpen(!isChatOpen);
+        document.body.style.overflowY = isChatOpen ? 'scroll' : 'hidden'
+    }
 
     return (<div className='header'>
         <div className='header__container container'>
             <div className='header__container__info'>
                 <div className='logo'>
-                    <img src={logo} alt="logo" onClick={()=>navigate('/')}/>
+                    <img src={logo} alt="logo" onClick={() => navigate('/')} />
                 </div>
                 <div className='info'>
                     <div className='info__number'>
@@ -32,7 +40,7 @@ export const Navbar: React.FC = (): JSX.Element => {
                         </div>
                         <p className='hotline'>24/7 Hotline</p>
                     </div>
-                    <Button variant='secondary' width='158px' height='53px'>LIVE CHAT</Button>
+                    <Button variant='secondary' width='158px' height='53px' onClick={() => toggleChat()}>LIVE CHAT</Button>
                 </div>
             </div>
             <div className='header__container__nav'>
@@ -52,7 +60,7 @@ export const Navbar: React.FC = (): JSX.Element => {
                         </ul>
                     </li>
                     <li>
-                        <Link to={'/'} className='header-link'>good to know</Link>
+                        <HashLink smooth to={'/#good_to_know'} className='header-link'>good to know</HashLink>
                     </li>
                     <li>
                         <Link to={'/'} className='header-link'>Contact US</Link>
@@ -63,9 +71,17 @@ export const Navbar: React.FC = (): JSX.Element => {
                 </ul>
             </div>
             <Sidebar isOpen={isOpen} toggle={toggle} />
-            <button onClick={() => toggle()} className="sidebar-btn">
-                <Icon/>
-            </button>
+            <Chat isOpen={isChatOpen} toggle={toggleChat} />
+            <div className="buttons">
+                <button onClick={() => toggleChat()} className="sidebar-btn">
+                    <span className="material-symbols-outlined">
+                        chat_bubble
+                    </span>
+                </button>
+                <button onClick={() => {toggle(); setIsChatOpen(false)}} className="sidebar-btn">
+                    <Icon />
+                </button>
+            </div>
         </div>
     </div>)
 }

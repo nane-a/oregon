@@ -9,6 +9,10 @@
     letter-spacing: 0.7px;
     text-transform: uppercase;
     cursor: pointer;
+
+    @include mobile{
+        padding: 8px 10px;
+    }
 }
 
 button:disabled{

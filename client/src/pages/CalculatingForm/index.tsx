@@ -7,10 +7,14 @@ import { ReactComponent as Route } from '../../assets/images/route.svg'
 import { ReactComponent as Accept } from '../../assets/images/accept.svg'
 import { ReactComponent as Card } from '../../assets/images/card.svg'
 import './style.scss'
+import { useSelector } from 'react-redux'
+import { selectIsLoading } from '../../redux/slices/formSlice'
+import { Loader } from '../../components/Loader'
 
 export const CalculatingForm: React.FC = (): JSX.Element => {
     const location = useLocation()
     const [activeStep, setActiveStep] = useState(1)
+    const isLoading = useSelector(selectIsLoading)
 
     useEffect(() => {
         switch (location.pathname) {
@@ -60,26 +64,31 @@ export const CalculatingForm: React.FC = (): JSX.Element => {
         },
     ]
 
-    return (<div className='calculating'>
-        <div className='calculating__form-container'>
-            <div className='calculating__form-container__header'>
-                <h1>Calculate your Oregon permit form</h1>
-                <p>(Temporary permits valid for 10 days)</p>
-            </div>
-            <div className='calculating__form-container__content'>
-                <div className='stepper-container'>
-                    {steps.map((e, i) => {
-                        return (
-                            <Stepper
-                                variant={activeStep === i + 1 ? 'secondary-stepper' : 'main-stepper'}
-                                disabled={activeStep <= i ? true : false}
-                                key={i}
-                            >{e.icon}<p>{e.content}</p></Stepper>
-                        )
-                    })}
+    return (
+        <>
+            {isLoading && <Loader />}
+            <div className='calculating'>
+                <div className='calculating__form-container'>
+                    <div className='calculating__form-container__header'>
+                        <h1>Calculate your Oregon permit form</h1>
+                        <p>(Temporary permits valid for 10 days)</p>
+                    </div>
+                    <div className='calculating__form-container__content'>
+                        <div className='stepper-container'>
+                            {steps.map((e, i) => {
+                                return (
+                                    <Stepper
+                                        variant={activeStep === i + 1 ? 'secondary-stepper' : 'main-stepper'}
+                                        disabled={activeStep <= i ? true : false}
+                                        key={i}
+                                    >{e.icon}<p>{e.content}</p></Stepper>
+                                )
+                            })}
+                        </div>
+                        <Outlet />
+                    </div>
                 </div>
-                <Outlet />
             </div>
-        </div>
-    </div>)
+        </>
+    )
 }

@@ -57,6 +57,26 @@ export const fetchRouteFormData = createAsyncThunk(
     }
 )
 
+export const fetchPaymentFormData = createAsyncThunk(
+    'fetchPaymentFormData',
+    async (params: number, { rejectWithValue }) => {
+        try {
+            const response = await axios.post("payment/send-payment", {
+                amount: Math.round(params * 100),
+                // token: 'tok_visa_chargeDeclined',
+                token: 'tok_visa',
+                usdot_id: localStorage.getItem('usdot_id')
+            })
+            return response
+        } catch (err: any) {
+            if (!err.response) {
+                throw err
+            }
+            return rejectWithValue(err.response.data)
+        }
+    }
+)
+
 const formSlice = createSlice({
     name: 'form',
     initialState,
@@ -68,15 +88,15 @@ const formSlice = createSlice({
             state.isLoading = true
         })
         builder.addCase(fetchFormData.fulfilled, (state, action: PayloadAction<any>) => {
-            state.data = action.payload.data
+            state.data = { ...state.data, contacts: action.payload.data }
             localStorage.setItem('usdot_id', action.payload.data.data.usdot_id)
             localStorage.setItem('usdot', action.payload.data.data.usdot)
             state.isLoading = false
 
         })
         builder.addCase(fetchFormData.rejected, (state, action: PayloadAction<any>) => {
-            state.data = action.payload
-            state.isLoading = true
+            state.data ={ ...state.data, contacts: action.payload}
+            state.isLoading = false
         })
 
         // Truck form data
@@ -84,13 +104,12 @@ const formSlice = createSlice({
             state.isLoading = true
         })
         builder.addCase(fetchTruckFormData.fulfilled, (state, action: PayloadAction<any>) => {
-            state.data = action.payload.data
+            state.data = { ...state.data, truck: action.payload.data }
             state.isLoading = false
-
         })
         builder.addCase(fetchTruckFormData.rejected, (state, action: PayloadAction<any>) => {
-            state.data = action.payload
-            state.isLoading = true
+            state.data = { ...state.data, truck: action.payload}
+            state.isLoading = false
         })
 
         // Route form data
@@ -98,17 +117,31 @@ const formSlice = createSlice({
             state.isLoading = true
         })
         builder.addCase(fetchRouteFormData.fulfilled, (state, action: PayloadAction<any>) => {
+            state.data = { ...state.data, route: action.payload.data }
+            state.isLoading = false
+        })
+        builder.addCase(fetchRouteFormData.rejected, (state, action: PayloadAction<any>) => {
+            state.data = { ...state.data, route: action.payload}
+            state.isLoading = false
+        })
+
+        // Payment form data
+        builder.addCase(fetchPaymentFormData.pending, (state) => {
+            state.isLoading = true
+        })
+        builder.addCase(fetchPaymentFormData.fulfilled, (state, action: PayloadAction<any>) => {
             state.data = action.payload.data
             state.isLoading = false
 
         })
-        builder.addCase(fetchRouteFormData.rejected, (state, action: PayloadAction<any>) => {
+        builder.addCase(fetchPaymentFormData.rejected, (state, action: PayloadAction<any>) => {
             state.data = action.payload
-            state.isLoading = true
+            state.isLoading = false
         })
     }
 })
 
 export const selectFormData = (state: RootState) => state.form.data
+export const selectIsLoading = (state: RootState) => state.form.isLoading
 
 export default formSlice.reducer

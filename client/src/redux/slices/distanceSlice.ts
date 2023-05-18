@@ -14,7 +14,7 @@ const initialState: {
 
 export const getDistanceAddPrice = createAsyncThunk(
     'getDistanceAddPrice',
-    async (params: { usdot: string }, { rejectWithValue }) => {
+    async (params: { usdot: number }, { rejectWithValue }) => {
         try {
             const response = await axios.post('/permit/get-distance-and-price', params)
             return response
@@ -45,7 +45,7 @@ const distanceSlice = createSlice({
         })
         builder.addCase(getDistanceAddPrice.rejected, (state, action: PayloadAction<any>) => {
             state.error = action.payload
-            state.isLoading = true
+            state.isLoading = false
         })
     }
 })

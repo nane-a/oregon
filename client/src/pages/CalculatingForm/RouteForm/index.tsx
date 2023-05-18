@@ -27,7 +27,7 @@ export const RouteForm: React.FC = (): JSX.Element => {
     const startPoints = useSelector(selectStartPointsData)
     const distanceAndPrice = useSelector(selectDistanceAddPrice)
 
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<RouteFormT>({defaultValues:{trip_type:'round trip'}});
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<RouteFormT>({ defaultValues: { trip_type: 'round trip' } });
 
     const [route_type, setRoute_type] = useState<string>()
     const [step, setStep] = useState<boolean>(true)
@@ -75,7 +75,7 @@ export const RouteForm: React.FC = (): JSX.Element => {
                     exit_point: exitPointBool ? data.exit_point : '',
                     entrance_point: statrPoint ? statrPoint : data.entrance_point
                 }))
-                    .then((res: any) => res.payload.data.success ? dispatch(getDistanceAddPrice({ usdot })) : {})
+                    .then((res: any) => res.payload.data.success ? dispatch(getDistanceAddPrice({ usdot: usdot_id })) : {})
         } else {
             setStartPointError(true)
         }
@@ -139,7 +139,7 @@ export const RouteForm: React.FC = (): JSX.Element => {
                         required
                     >
                         <option value="" hidden>Select one</option>
-                        {startPoints.startPoints.map((e: any, i: number) => {
+                        {startPoints?.startPoints?.map((e: any, i: number) => {
                             return <optgroup label={e.label} key={i}>
                                 {e.options.map((opt: any, ind: number) => {
                                     return <option value={opt.value} key={ind}>{opt.label}</option>
@@ -264,8 +264,17 @@ export const RouteForm: React.FC = (): JSX.Element => {
                     </div>
                 </div>
                 <div className='button-container'>
-                    <Button variant='secondary' type='button' onClick={() => { setStep(true); setRoute_type(''); setStops([{ city_or_zip: '', service_type: '' }]); reset(); dispatch(resetData()) }}>Back</Button>
-                    <Button variant='main' type='button' onClick={() => distanceAndPrice?.success ? navigate('/calculating-form/payment') : ''} disabled={!distanceAndPrice?.success}>Next</Button>
+                    <Button
+                        variant='secondary'
+                        type='button'
+                        onClick={() => { setStep(true); setRoute_type(''); setStops([{ city_or_zip: '', service_type: '' }]); reset(); dispatch(resetData()) }}
+                    >Back</Button>
+                    <Button
+                        variant='main'
+                        type='button'
+                        onClick={() => distanceAndPrice?.success ? navigate('/calculating-form/payment') : ''}
+                        disabled={!distanceAndPrice?.success}
+                    >Next</Button>
                 </div>
             </form>
         }

@@ -35,7 +35,7 @@ const weightsSlice = createSlice({
         })
         builder.addCase(getWeights.rejected, (state, action: PayloadAction<any>) => {
             state.error = action.payload
-            state.isLoading = true
+            state.isLoading = false
         })
     }
 })

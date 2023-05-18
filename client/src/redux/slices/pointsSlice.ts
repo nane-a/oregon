@@ -46,7 +46,7 @@ const pointsSlice = createSlice({
         })
         builder.addCase(getExitPoints.rejected, (state, action: PayloadAction<any>) => {
             state.error = action.payload
-            state.isLoading = true
+            state.isLoading = false
         })
 
         //Start points
@@ -59,7 +59,7 @@ const pointsSlice = createSlice({
         })
         builder.addCase(getStartPoints.rejected, (state, action: PayloadAction<any>) => {
             state.error = action.payload
-            state.isLoading = true
+            state.isLoading = false
         })
     }
 })
