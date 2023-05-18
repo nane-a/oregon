@@ -61,7 +61,7 @@ class PermitController {
             errorMessage.name_of_first_driver = 'Invalid name field'
         } else if (name_of_second_driver && !errorMessage.name_of_second_driver && !nameRegex.test(name_of_second_driver)) {
             errorMessage.name_of_second_driver = 'Invalid name field'
-        } else if (!errorMessage.vin && vin.length !== 16) {
+        } else if (!errorMessage.vin && vin.length !== 17) {
             errorMessage.vin = 'Invalid Vin code'
         }
         try {
@@ -176,7 +176,7 @@ class PermitController {
     }
 
     getWeights = async (req, res) => {
-        const weights = await Taxes.findAll({ attributes: ['weight'] })
+        const weights = await Taxes.findAll()
         res.status(200).send({
             success: true,
             data: weights,
