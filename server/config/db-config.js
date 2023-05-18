@@ -1,7 +1,7 @@
 module.exports = {
     DB: 'oregon_db',
     USER: 'root',
-    PASSWORD: '',
+    PASSWORD: '123456',
     HOST: 'localhost',
     DIALECT: 'mysql'
 }
