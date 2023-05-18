@@ -57,7 +57,19 @@ app.use(express.urlencoded({ extended: true }))
 const http = require("http");
 const { Op } = require('sequelize')
 
-app.use(cors());
+const whitelist = ["http://localhost:3000"]
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error("Not allowed by CORS"))
+        }
+    },
+    credentials: true,
+}
+
+app.use(cors(corsOptions))
 
 const server = http.createServer(app);
 
