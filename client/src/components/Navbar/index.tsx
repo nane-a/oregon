@@ -62,9 +62,9 @@ export const Navbar: React.FC = (): JSX.Element => {
                     <li>
                         <HashLink smooth to={'/#good_to_know'} className='header-link'>good to know</HashLink>
                     </li>
-                    <li>
+                    {/* <li>
                         <Link to={'/'} className='header-link'>Contact US</Link>
-                    </li>
+                    </li> */}
                     <li>
                         <Link to={'/terms-and-conditions'} className='header-link'>Terms and conditions</Link>
                     </li>

@@ -25,7 +25,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
     console.log(select);
     
 
-    const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm<TruckFormT>({ defaultValues: select?.truck?.data || { purchased_by_company: 'owned', name_of_second_driver: '', axels: 5 } });
+    const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm<TruckFormT>({ defaultValues: select?.truck?.data || { name_of_second_driver: '', axels: 5 } });
 
     const [secondDriver, setSecondDriver] = useState<boolean>(false)
 
@@ -41,7 +41,7 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
 
     const onSubmit = (data: TruckFormT): void => {
         const usdot_id = localStorage.getItem('usdot_id')
-        if (usdot_id) dispatch(fetchTruckFormData({ ...data, usdot_id })).then((res: any) => res.payload.data.success ? navigate('/calculating-form/route') : '')
+        if (usdot_id) dispatch(fetchTruckFormData({ ...data, usdot_id, purchased_by_company: data.purchased === 'owned' ? 'owned' : data.purchased_by_company})).then((res: any) => res.payload.data.success ? navigate('/calculating-form/route') : '')
     }
 
     return (<div className='truck-form-container'>

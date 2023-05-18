@@ -25,9 +25,9 @@ export const Footer: React.FC = (): JSX.Element => {
                 <div className='footer-navigation__item'>
                     <HashLink smooth to={'/#good_to_know'} className='header-link'>good to know</HashLink>
                 </div>
-                <div className='footer-navigation__item'>
+                {/* <div className='footer-navigation__item'>
                     <Link to={'/'}>Contact US</Link>
-                </div>
+                </div> */}
                 <div className='footer-navigation__item'>
                     <Link to={'/terms-and-conditions'}>Terms and conditions</Link>
                 </div>
