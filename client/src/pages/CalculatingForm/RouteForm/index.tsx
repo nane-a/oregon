@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getExitPoints, getStartPoints, selectExitPointsData, selectStartPointsData } from '../../../redux/slices/pointsSlice';
 import { getDistanceAddPrice, selectDistanceAddPrice } from '../../../redux/slices/distanceSlice';
 import { resetData } from '../../../redux/slices/distanceSlice';
-import { fetchRouteFormData } from '../../../redux/slices/formSlice';
+import { fetchRouteFormData, selectFormData } from '../../../redux/slices/formSlice';
 import { RouteFormT } from '../models/calculatingForms';
 import { Button } from '../../../components/Button'
 import { Select } from '../../../components/Select';
@@ -26,8 +26,9 @@ export const RouteForm: React.FC = (): JSX.Element => {
     const exitPoints = useSelector(selectExitPointsData)
     const startPoints = useSelector(selectStartPointsData)
     const distanceAndPrice = useSelector(selectDistanceAddPrice)
+    const select = useSelector(selectFormData)
 
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<RouteFormT>({ defaultValues: { trip_type: 'round trip' } });
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<RouteFormT>({ defaultValues: select?.route?.data || { trip_type: 'round trip' } })
 
     const [route_type, setRoute_type] = useState<string>()
     const [step, setStep] = useState<boolean>(true)
@@ -82,7 +83,15 @@ export const RouteForm: React.FC = (): JSX.Element => {
     }
 
     useEffect(() => {
-        setRoute_type('')
+        if(select?.route?.data){
+            console.log(select?.route?.data);
+            setRoute_type(select?.route?.data.route_type)
+            setStep(false)
+        }else{
+            console.log('ddd');
+            
+            setRoute_type('')
+        }
         dispatch(getStartPoints())
         dispatch(getExitPoints())
         dispatch(resetData())

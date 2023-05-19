@@ -52,6 +52,12 @@ class PermitController {
             async (err, source) => {
                 if (err) {
                     console.error(err);
+                    res.status(400).send({
+                        success: false,
+                        data: null,
+                        message: `Your card was declined`,
+                        error: err
+                    })
                 } else {
                     await stripe.charges.create({
                         amount,

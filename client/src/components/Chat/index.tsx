@@ -1,9 +1,12 @@
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getMessages, selectMessages, updateState } from '../../redux/slices/chatSlice';
+import { AppDispatch } from '../../redux/store';
+import { io } from 'socket.io-client';
 import { ChatForm } from './ChatForm';
 import { ReactComponent as File } from '../../assets/images/file.svg'
 import { ReactComponent as Send } from '../../assets/images/send.svg'
 import './style.scss'
-import { useEffect, useRef, useState } from 'react';
-import { socket } from '../../api/socket';
 
 interface ChatI {
     isOpen: boolean;
@@ -11,28 +14,45 @@ interface ChatI {
 }
 
 export const Chat: React.FC<ChatI> = (props: ChatI): JSX.Element => {
+    const socket = io("http://localhost:5000");
+
     const [chatOpen, setChatOpen] = useState<boolean>(false)
-    const [messages, setMessages] = useState<any>([
-        { text: 'This is message from admin', name: 'admin', time: '9:10' },
-        { text: 'This is message from admin', name: 'admin', time: '9:11' },
-        { text: 'This is message from you', name: 'Dan', time: '10:16', usdot: localStorage.getItem('usdot') },
-        { text: 'This is message from you', name: 'Dan', time: '10:17', usdot: localStorage.getItem('usdot') },
-    ]) //message type
+    const messages = useSelector(selectMessages)
     const [message, setMessage] = useState<string>("")
     const [img, setImg] = useState<File | null>(null)
     const lastMessageRef = useRef<any>(null);
 
-    // useEffect(() => {
-    //     // socket.on("messageResponse", data => setMessages([...messages, data]))
-    // }, [socket, messages])
+    const dispatch = useDispatch<AppDispatch>()
+
+    useEffect(() => {
+        socket.on("receive_message", (data) => {
+            dispatch(updateState(data));
+        });
+    }, [socket, messages]);
+
+    const joinRoom = () => {
+        if (localStorage.getItem('usdot') !== "") {
+            socket.emit("join_room", localStorage.getItem('usdot'));
+        }
+    };
+
+    useEffect(() => {
+        joinRoom();
+        const usdot = localStorage.getItem('usdot')
+        if (usdot) dispatch(getMessages({ usdot }))
+        return () => {
+            socket.disconnect();
+        };
+    }, [localStorage.getItem('usdot')]);
 
     useEffect(() => {
         lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
     useEffect(() => {
-        if (localStorage.getItem('usdot')) {
+        if (localStorage.getItem('usdot') !== null) {
             setChatOpen(true)
+
         }
     }, [])
 
@@ -40,23 +60,22 @@ export const Chat: React.FC<ChatI> = (props: ChatI): JSX.Element => {
         setChatOpen(true)
     }
 
-    // console.log(img);
-
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getMonth() + 1
+        }/${currentDate.getDate()}/${currentDate.getFullYear()}, ${currentDate.toLocaleTimeString()}`;
 
     const handleSendMessage = () => {
-        // if (message.trim() && localStorage.getItem("name")) {
-        //     socket.emit("message",
-        //         {
-        //             text: message,
-        //             name: localStorage.getItem("name"),
-        //             id: `${socket.id}${Math.random()}`,
-        //             socketID: socket.id
-        //         }
-        //     )
-        // }
-
-        if (message)
-            setMessages([...messages, { text: message, name: localStorage.getItem("name"), time: `${new Date().getHours()}:${new Date().getMinutes()}` }])
+        if (message.length && localStorage.getItem("usdot")) {
+            socket.emit("send_message",
+                {
+                    text: message,
+                    room: localStorage.getItem('usdot'),
+                    time: formattedDate,
+                    from: localStorage.getItem('usdot'),
+                    to: "admin"
+                }
+            )
+        }
         setMessage("")
     }
 
@@ -70,8 +89,8 @@ export const Chat: React.FC<ChatI> = (props: ChatI): JSX.Element => {
         {chatOpen ?
             <>
                 <div className='chat__content'>
-                    {messages.map((mes: any, i: number) => {
-                        return <div className={mes.usdot === localStorage.getItem('usdot') ? 'message-container my' : 'message-container'} key={i}>
+                    {messages?.data?.map((mes: any, i: number) => {
+                        return <div className={mes.from === localStorage.getItem('usdot') ? 'message-container my' : 'message-container'} key={i}>
                             <p>{mes.name} {mes.time}</p>
                             <div className='message'>{mes.text}</div>
                         </div>

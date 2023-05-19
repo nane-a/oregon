@@ -4,6 +4,7 @@ import weightsReducer from '../redux/slices/weightsSlice'
 import pointsReducer from '../redux/slices/pointsSlice'
 import distanceReducer from '../redux/slices/distanceSlice'
 import statesReducer from '../redux/slices/statesSlice'
+import chatReducer from '../redux/slices/chatSlice'
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     weights: weightsReducer,
     points: pointsReducer,
     distance: distanceReducer,
-    states: statesReducer
+    states: statesReducer,
+    chat: chatReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

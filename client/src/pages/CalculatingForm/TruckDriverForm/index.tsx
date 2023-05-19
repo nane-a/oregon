@@ -25,7 +25,11 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
 
     const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm<TruckFormT>({
         defaultValues: select?.truck?.data ?
-            { ...select?.truck?.data, purchased: select?.truck?.data.purchased_by_company === 'owned' ? 'owned' : 'leased' }
+            {
+                ...select?.truck?.data,
+                purchased: select?.truck?.data.purchased_by_company === 'owned' ? 'owned' : 'leased',
+                purchased_by_company: select?.truck?.data.purchased_by_company === 'owned' ? '' : select?.truck?.data.purchased_by_company
+            }
             : { name_of_second_driver: '', axels: 5 }
     });
 
