@@ -4,7 +4,12 @@ const nodemailer = require('nodemailer');
 
 class PermitController {
     showList = async (req, res) => {
-        await stripe.charges.list((err, payments) => {
+        const { count, last_id } = req.body
+        let obj = { limit: count }
+        if (last_id) {
+            obj.starting_after = last_id
+        }
+        await stripe.charges.list(obj, (err, payments) => {
             if (err) {
                 console.error(err);
             } else {
@@ -12,12 +17,14 @@ class PermitController {
                     if (payment.description.split("")[0] === "{") {
                         let json = JSON.parse(payment.description)
                         let amount = payment.amount
-                        return {
-                            amount,
-                            email: json.email,
-                            name: json.name,
-                            usdot: json.usdot,
-                        }
+                        if (amount && json.email && json.name && json.usdot)
+                            return {
+                                amount,
+                                email: json.email,
+                                name: json.name,
+                                usdot: json.usdot,
+                                id: payment.id
+                            }
                     }
                     return 5
                 }).filter(elm => elm !== 5)

@@ -24,8 +24,9 @@ class PermitController {
                 await Contact.findOne({ where: { usdot, draft: true } })
                     .then(async (result) => {
                         if (result) {
-                            data = result
-                            await Contact.update(req.body, { where: { id: result.id } })
+                            await Contact.update(req.body, { where: { id: result.id } });
+                            const updatedData = await Contact.findByPk(result.id);
+                            data = updatedData;
                         } else {
                             data = await Contact.create(req.body)
                         }
@@ -70,8 +71,9 @@ class PermitController {
                 await Truck.findOne({ where: { usdot_id } })
                     .then(async (result) => {
                         if (result) {
-                            data = result
-                            await Truck.update(req.body, { where: { id: result.id } })
+                            await Truck.update(req.body, { where: { id: result.id } });
+                            const updatedData = await Truck.findByPk(result.id);
+                            data = updatedData;
                         } else {
                             data = await Truck.create(req.body)
                         }
@@ -113,8 +115,6 @@ class PermitController {
                 await Route.findOne({ where: { usdot_id } })
                     .then(async (result) => {
                         if (result) {
-                            route = result
-
                             await Route.update({
                                 usdot_id,
                                 route_type,
@@ -122,7 +122,8 @@ class PermitController {
                                 entrance_point,
                                 exit_point
                             }, { where: { id: result.id } })
-
+                            const updatedData = await Route.findByPk(result.id);
+                            route = updatedData;
                             Stops.destroy({
                                 where: {
                                     route_id: result.id
