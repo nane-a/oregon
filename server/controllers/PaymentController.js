@@ -17,7 +17,7 @@ class PermitController {
                     if (payment.description.split("")[0] === "{") {
                         let json = JSON.parse(payment.description)
                         let amount = payment.amount
-                        if (amount && json.email && json.name && json.usdot && json.lastFour)
+                        if (amount && json.email && json.name && json.usdot)
                             return {
                                 id: payment.id,
                                 amount,
