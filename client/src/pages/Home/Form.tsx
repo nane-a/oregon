@@ -13,8 +13,6 @@ export const Form: React.FC = (): JSX.Element => {
     const navigate = useNavigate()
     const select = useSelector(selectFormData)
 
-    console.log(select);
-    
     const { register, handleSubmit, formState: { errors } } = useForm<MainFormT>({defaultValues: select?.contacts?.data});
 
     const onSubmit = (data: MainFormT): void => {

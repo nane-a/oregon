@@ -59,13 +59,14 @@ export const fetchRouteFormData = createAsyncThunk(
 
 export const fetchPaymentFormData = createAsyncThunk(
     'fetchPaymentFormData',
-    async (params: number, { rejectWithValue }) => {
+    async (params: any, { rejectWithValue }) => {
         try {
             const response = await axios.post("payment/send-payment", {
-                amount: Math.round(params * 100),
-                // token: 'tok_visa_chargeDeclined',
-                token: 'tok_visa',
-                usdot_id: localStorage.getItem('usdot_id')
+                amount: Math.round(params.price * 100),
+                token: params.id,
+                usdot_id: localStorage.getItem('usdot_id'),
+                email: localStorage.getItem('email'),
+                usdot: localStorage.getItem('usdot')
             })
             return response
         } catch (err: any) {
@@ -91,8 +92,8 @@ const formSlice = createSlice({
             state.data = { ...state.data, contacts: action.payload.data }
             localStorage.setItem('usdot_id', action.payload.data.data.usdot_id)
             localStorage.setItem('usdot', action.payload.data.data.usdot)
+            localStorage.setItem('email', action.payload.data.data.email_adress)
             state.isLoading = false
-
         })
         builder.addCase(fetchFormData.rejected, (state, action: PayloadAction<any>) => {
             state.data ={ ...state.data, contacts: action.payload}

@@ -57,9 +57,11 @@ export const PaymentForm: React.FC = (): JSX.Element => {
         })
 
         if (!error) {
-            dispatch(fetchPaymentFormData(price.data.price))
+            const { source } = await stripe.createSource(elements.getElement(CardCvcElement, CardExpiryElement, CardNumberElement));
+            
+            dispatch(fetchPaymentFormData({ price: price.data.price, id: source.id }))
                 .then((res: any) => res.payload.data.success && navigate('/calculating-form/accept'))
-                .catch(e => navigate('/calculating-form/declined'))
+                .catch(() => navigate('/calculating-form/declined'))
         } else {
             console.log(error);
         }

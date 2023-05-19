@@ -40,9 +40,9 @@ export const Chat: React.FC<ChatI> = (props: ChatI): JSX.Element => {
         setChatOpen(true)
     }
 
-    console.log(img);
-    
-    
+    // console.log(img);
+
+
     const handleSendMessage = () => {
         // if (message.trim() && localStorage.getItem("name")) {
         //     socket.emit("message",
@@ -82,8 +82,8 @@ export const Chat: React.FC<ChatI> = (props: ChatI): JSX.Element => {
                     <div className='chat__send__cont'>
                         <textarea value={message} onChange={e => setMessage(e.target.value)}></textarea>
                         <div>
-                            <File/>
-                            <input type="file" onChange={(e:any)=>setImg(e.target.files[0])}/>
+                            <File />
+                            <input type="file" onChange={(e: any) => setImg(e.target.files[0])} />
                             <Send className='send' onClick={handleSendMessage} />
                         </div>
                     </div>

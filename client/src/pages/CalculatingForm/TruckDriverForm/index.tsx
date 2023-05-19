@@ -22,10 +22,12 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
     const statesUS = useSelector(selectStatesDataUS)
     const statesCanada = useSelector(selectStatesDataCanada)
 
-    console.log(select);
-    
 
-    const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm<TruckFormT>({ defaultValues: select?.truck?.data || { name_of_second_driver: '', axels: 5 } });
+    const { register, handleSubmit, formState: { errors, isValid }, watch } = useForm<TruckFormT>({
+        defaultValues: select?.truck?.data ?
+            { ...select?.truck?.data, purchased: select?.truck?.data.purchased_by_company === 'owned' ? 'owned' : 'leased' }
+            : { name_of_second_driver: '', axels: 5 }
+    });
 
     const [secondDriver, setSecondDriver] = useState<boolean>(false)
 
@@ -41,7 +43,11 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
 
     const onSubmit = (data: TruckFormT): void => {
         const usdot_id = localStorage.getItem('usdot_id')
-        if (usdot_id) dispatch(fetchTruckFormData({ ...data, usdot_id, purchased_by_company: data.purchased === 'owned' ? 'owned' : data.purchased_by_company})).then((res: any) => res.payload.data.success ? navigate('/calculating-form/route') : '')
+        console.log({ ...data, usdot_id, purchased_by_company: data.purchased === 'owned' ? 'owned' : data.purchased_by_company });
+
+        if (usdot_id) dispatch(fetchTruckFormData({ ...data, usdot_id, purchased_by_company: data.purchased === 'owned' ? 'owned' : data.purchased_by_company }))
+            .then((res: any) => res.payload.data.success ? navigate('/calculating-form/route') : '')
+
     }
 
     return (<div className='truck-form-container'>
@@ -96,10 +102,10 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                         validationSchema={{
                             required: "Required",
                             min: 1886,
-                            max: new Date().getFullYear()  
+                            max: new Date().getFullYear()
                         }}
                         required
-                        
+
                     />
                     <Input
                         type="text"
