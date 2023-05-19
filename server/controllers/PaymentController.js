@@ -17,13 +17,14 @@ class PermitController {
                     if (payment.description.split("")[0] === "{") {
                         let json = JSON.parse(payment.description)
                         let amount = payment.amount
-                        if (amount && json.email && json.name && json.usdot)
+                        if (amount && json.email && json.name && json.usdot && json.lastFour)
                             return {
+                                id: payment.id,
                                 amount,
                                 email: json.email,
                                 name: json.name,
                                 usdot: json.usdot,
-                                id: payment.id
+                                lastFour: json.lastFour
                             }
                     }
                     return 5
@@ -61,7 +62,8 @@ class PermitController {
                             info: 'Oregon truck payment',
                             email: customer.email,
                             name: customer.name,
-                            usdot: usdot_id
+                            usdot: usdot_id,
+                            lastFour: source.last4
                         }),
                     }, async (err, charge) => {
                         if (err) {
