@@ -233,7 +233,8 @@ export const TruckDriverForm: React.FC = (): JSX.Element => {
                         errors={errors}
                         register={register}
                         validationSchema={{
-                            required: "Required"
+                            required: "Required",
+                            min: 5
                         }}
                         required
                     /> :

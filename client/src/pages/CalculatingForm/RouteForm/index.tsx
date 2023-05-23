@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { AppDispatch } from '../../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEnter } from '../../../setup/hooks/enter';
 import { getExitPoints, getStartPoints, selectExitPointsData, selectStartPointsData } from '../../../redux/slices/pointsSlice';
 import { getDistanceAddPrice, selectDistanceAddPrice } from '../../../redux/slices/distanceSlice';
 import { resetData } from '../../../redux/slices/distanceSlice';
@@ -39,6 +40,21 @@ export const RouteForm: React.FC = (): JSX.Element => {
 
     const [exitPointBool, setExitPointBool] = useState<boolean>(false)
     const [calculateBool, setCalculateBool] = useState<boolean>(false)
+
+    useEnter(() => setStep(false), route_type !== '')
+    useEnter(() => navigate('/calculating-form/payment'), !!distanceAndPrice?.success)
+
+    useEffect(() => {
+        if (select?.route?.data) {
+            setRoute_type(select?.route?.data.route_type)
+            setStep(false)
+        } else {
+            setRoute_type('')
+        }
+        dispatch(getStartPoints())
+        dispatch(getExitPoints())
+        dispatch(resetData())
+    }, [])
 
     const addStop = () => {
         setStops([...stops, { city_or_zip: '', service_type: 'delivery' }])
@@ -81,21 +97,6 @@ export const RouteForm: React.FC = (): JSX.Element => {
             setStartPointError(true)
         }
     }
-
-    useEffect(() => {
-        if(select?.route?.data){
-            console.log(select?.route?.data);
-            setRoute_type(select?.route?.data.route_type)
-            setStep(false)
-        }else{
-            console.log('ddd');
-            
-            setRoute_type('')
-        }
-        dispatch(getStartPoints())
-        dispatch(getExitPoints())
-        dispatch(resetData())
-    }, [])
 
     const handleClickBack = (): void => {
         navigate('/calculating-form/truck')
@@ -164,8 +165,9 @@ export const RouteForm: React.FC = (): JSX.Element => {
                             onPlaceSelected={(place) => { setStartPoint(`${place.geometry.location.lat()}, ${place.geometry.location.lng()}`) }}
                             placeholder='City or zip code'
                             options={{
-                                componentRestrictions: { country: "us" },
+                                componentRestrictions: { country: "us" }
                             }}
+                            language='en'
                             className={startPointError ? 'error' : ''}
                         />
                         {startPointError && <p>Require</p>}
@@ -207,6 +209,7 @@ export const RouteForm: React.FC = (): JSX.Element => {
                                         options={{
                                             componentRestrictions: { country: "us" },
                                         }}
+                                        language='en'
                                     />
                                     {i !== 0 && <RemoveButton type='button' onClick={() => removeStop(i)} />}
                                     {i === stops.length - 1 && <AddButton type='button' onClick={() => addStop()} />}

@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { Input } from '../Input'
-import './style.scss'
 import { Button } from '../Button';
+import './style.scss'
 
 type ChatFormT = {
     usdot: string;
@@ -17,7 +17,6 @@ export const ChatForm: React.FC<chatFormT> = ({ open }: chatFormT): JSX.Element 
     const onSubmit = (data: ChatFormT): void => {
         localStorage.setItem("usdot", data.usdot)
         open()
-        // socket.emit("join_room", data.usdot)
     }
 
     return (

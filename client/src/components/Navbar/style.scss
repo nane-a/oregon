@@ -144,6 +144,38 @@
             }
         }
 
+        .chat-btn {
+            position: fixed;
+            bottom: 3%;
+            right: 3%;
+            background-color: $main-color;
+            padding: 25px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.404);
+            cursor: pointer;
+            transition: all 0.5s;
+            z-index: 1;
+
+            :first-child {
+                position: relative;
+            }
+
+            :last-child {
+                position: absolute;
+                top: 45%;
+                right: 39%;
+            }
+
+            @include mobile {
+                display: none;
+            }
+        }
+
+        .chat-btn.isHidden {
+            right: -20%;
+        }
+
 
         .buttons {
             display: none;
@@ -161,6 +193,21 @@
                 }
             }
 
+            .__chat {
+                path {
+
+                    fill: $main-color !important;
+                }
+
+                @include tablet {
+                    display: none;
+                }
+
+                @include mobile {
+                    display: block;
+                }
+            }
+
             .material-symbols-outlined {
                 font-size: 30px;
                 margin-top: 4px;
@@ -172,7 +219,7 @@
                     'opsz' 48
             }
 
-            @include tablet{
+            @include tablet {
                 display: flex;
             }
         }

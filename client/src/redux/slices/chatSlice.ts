@@ -51,6 +51,7 @@ const chatSlice = createSlice({
 })
 
 export const selectMessages = (state: RootState) => state.chat.data
+export const selectIsLoading = (state: RootState) => state.chat.isLoading
 export const { updateState } = chatSlice.actions
 
 export default chatSlice.reducer

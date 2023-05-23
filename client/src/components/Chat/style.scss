@@ -63,10 +63,18 @@
             right: 24px;
             cursor: pointer;
 
-            svg,
-            path {
+            
+            svg, path{
                 width: 21px !important;
                 height: 21px !important;
+                fill: $main-color !important;
+            }
+        }
+
+        &__group{
+            text-align: center;
+            p{
+                color: rgba(0, 0, 0, 0.678);
             }
         }
     }

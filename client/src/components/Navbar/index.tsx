@@ -3,11 +3,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import { HashLink } from 'react-router-hash-link'
 import { Button } from '../Button'
 import { Sidebar } from '../Sidebar'
+import { Chat } from "../Chat";
 import { ReactComponent as Icon } from '../../assets/images/side-bar-icon.svg'
+import { ReactComponent as ChatIcon } from '../../assets/images/chat.svg'
+import { ReactComponent as ChatIconS } from '../../assets/images/chat2.svg'
 import phoneIcon from '../../assets/images/phone-icon.png'
 import logo from '../../assets/images/logo.svg'
 import './style.scss'
-import { Chat } from "../Chat";
 
 export const Navbar: React.FC = (): JSX.Element => {
     const [isOpen, setIsOpen] = useState(false)
@@ -62,9 +64,6 @@ export const Navbar: React.FC = (): JSX.Element => {
                     <li>
                         <HashLink smooth to={'/#good_to_know'} className='header-link'>good to know</HashLink>
                     </li>
-                    {/* <li>
-                        <Link to={'/'} className='header-link'>Contact US</Link>
-                    </li> */}
                     <li>
                         <Link to={'/terms-and-conditions'} className='header-link'>Terms and conditions</Link>
                     </li>
@@ -72,13 +71,15 @@ export const Navbar: React.FC = (): JSX.Element => {
             </div>
             <Sidebar isOpen={isOpen} toggle={toggle} />
             <Chat isOpen={isChatOpen} toggle={toggleChat} />
+            <button onClick={() => toggleChat()} className={isChatOpen ? "chat-btn isHidden" : 'chat-btn'}>
+                <ChatIcon />
+                <ChatIconS />
+            </button>
             <div className="buttons">
-                <button onClick={() => toggleChat()} className="sidebar-btn">
-                    <span className="material-symbols-outlined">
-                        chat_bubble
-                    </span>
+                <button onClick={() => toggleChat()} className="sidebar-btn __chat">
+                    <ChatIcon />
                 </button>
-                <button onClick={() => {toggle(); setIsChatOpen(false)}} className="sidebar-btn">
+                <button onClick={() => { toggle(); setIsChatOpen(false) }} className="sidebar-btn">
                     <Icon />
                 </button>
             </div>

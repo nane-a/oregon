@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectIsLoading } from '../../redux/slices/formSlice';
 import { Loader } from '../../components/Loader';
@@ -6,11 +6,29 @@ import { Form } from './Form';
 import map from '../../assets/images/map-img.png'
 import './style.scss'
 
+import Image from "../../assets/images/home-page-image.jpg";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { Blurhash } from "react-blurhash";
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
+
 
 export const Home: React.FC = (): JSX.Element => {
     const isLoading = useSelector(selectIsLoading)
 
+    const [isLoaded, setLoaded] = useState(false);
+    const [isLoadStarted, setLoadStarted] = useState(false);
+
+    const handleLoad = () => {
+        setLoaded(true);
+    };
+
+    const handleLoadStarted = () => {
+        setLoadStarted(true);
+    };
+
     useEffect(() => {
+        setLoadStarted(true)
         window.scrollTo(0, 0)
     }, [])
 
@@ -18,7 +36,26 @@ export const Home: React.FC = (): JSX.Element => {
         <>
             {isLoading && <Loader />}
             <div className='home' id='home'>
-                <section className='section_one'>
+                <section className='section_one'>   
+                    <div className='image-container'>
+                        <LazyLoadImage
+                            src={Image}
+                            afterLoad={handleLoad}
+                            beforeLoad={handleLoadStarted}
+                            effect='blur'
+                        />
+                        {!isLoaded && isLoadStarted && (
+                            <Blurhash
+                                hash="LYI$B1WA-:00_4t7xuRja~Ioog-;"
+                                width={400}
+                                height={300}
+                                resolutionX={32}
+                                resolutionY={32}
+                                punch={1}
+                                className='blur'
+                            />
+                        )}
+                    </div>
                     <div className='container'>
                         <Form />
                     </div>

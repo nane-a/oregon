@@ -31,7 +31,7 @@ export const Input: React.FC<InputI> = ({ name, label, register, errors, require
       id={name}
       name={name}
       type={type}
-      min={type==='date' ? calculateDate() : ''}
+      min={type==='date' ? calculateDate() : 0}
       {...register(name, validationSchema)}
       className='input'
       placeholder={placeholder}
@@ -47,7 +47,7 @@ export const Input: React.FC<InputI> = ({ name, label, register, errors, require
       <span className="error">{errors[name]?.message}</span>
     )}
     {errors[name]?.type === "min" && (
-      <span className="error">Must be bigger than {validationSchema.min}</span>
+      <span className="error">Must be bigger than {validationSchema.min-1}</span>
     )}
     {errors[name]?.type === "max" && (
       <span className="error">Can't be higher than {validationSchema.max}</span>
