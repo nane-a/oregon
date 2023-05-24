@@ -4,39 +4,59 @@ const nodemailer = require('nodemailer');
 
 class PermitController {
     showList = async (req, res) => {
+
         const { count, last_id } = req.body
         let obj = { limit: count }
         if (last_id) {
             obj.starting_after = last_id
         }
-        await stripe.charges.list(obj, (err, payments) => {
-            if (err) {
-                console.error(err);
-            } else {
-                payments.data = payments.data.map(payment => {
-                    if (payment.description.split("")[0] === "{") {
-                        let json = JSON.parse(payment.description)
-                        let amount = payment.amount
-                        if (amount && json.email && json.name && json.usdot)
-                            return {
-                                id: payment.id,
-                                amount,
-                                email: json.email,
-                                name: json.name,
-                                usdot: json.usdot,
-                                lastFour: json.lastFour
-                            }
-                    }
-                    return 5
-                }).filter(elm => elm !== 5)
-                res.status(200).send({
-                    success: true,
-                    data: payments.data,
-                    message: `Your payment was successfully completed`,
-                    error: null
-                })
+
+        new Promise(async (resp, rej) => {
+            try {
+                const list = await stripe.charges.list();
+                resp(list.data.length)
+            } catch (e) {
+                rej(e)
             }
-        });
+        }).then(async (result) => {
+            await stripe.charges.list(obj, (err, payments) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    payments.data = payments.data.map(payment => {
+                        if (payment.description.split("")[0] === "{") {
+                            let json = JSON.parse(payment.description)
+                            let amount = payment.amount
+                            if (amount && json.email && json.name && json.usdot)
+                                return {
+                                    id: payment.id,
+                                    amount: `${amount / 100}$`,
+                                    email: json.email,
+                                    name: json.name,
+                                    usdot: json.usdot,
+                                    lastFour: json.lastFour,
+                                    amount_refunded: `${payment.amount_refunded / 100}$`,
+                                    status: payment.status,
+                                }
+                        }
+                        return 5
+                    }).filter(elm => elm !== 5)
+                    res.status(200).send({
+                        success: true,
+                        data: { list: payments.data, totalCount: result },
+                        message: `Your request was successfully completed`,
+                        error: null
+                    })
+                }
+            });
+        }).catch(error => {
+            res.send(400).send({
+                success: false,
+                data: null,
+                message: `Your request was failed`,
+                error
+            })
+        })
     }
 
     sendPayment = async (req, res) => {
@@ -120,6 +140,30 @@ class PermitController {
             }
         );
     }
+
+    refund = async (req, res) => {
+        const { amount, charge } = req.body
+        try {
+            const refund = await stripe.refunds.create({
+                charge,
+                amount,
+            });
+            res.status(200).send({
+                success: true,
+                data: refund,
+                message: `Your refund was successfully completed`,
+                error: null
+            })
+        } catch (error) {
+            res.status(400).send({
+                success: false,
+                data: null,
+                message: `Your refund was failed`,
+                error
+            })
+        }
+    }
+
 }
 
 module.exports = new PermitController

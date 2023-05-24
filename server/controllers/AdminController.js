@@ -17,20 +17,26 @@ class AdminController {
     }
 
     login(req, res) {
-        const token = jwt.sign({ id: req.user.id }, "jwt_secret");
+        const token = jwt.sign({ id: req.user.id, role: "admin" }, "jwt_secret");
         res.json({ token });
     }
 
     isLogged(jwt_payload, done) {
-        Admin.findByPk(jwt_payload.id)
-            .then((admin) => {
-                return done(null, admin);
-            })
-            .catch((err) => {
-                return done(err, false, {
-                    message: "Token not matched.",
+        if (jwt_payload.role === "admin") {
+            Admin.findByPk(jwt_payload.id)
+                .then((admin) => {
+                    return done(null, admin);
+                })
+                .catch((err) => {
+                    return done(err, false, {
+                        message: "Token not matched.",
+                    });
                 });
+        } else {
+            return done(err, false, {
+                message: "Token not matched.",
             });
+        }
     }
 
     async isRegistered(email, password, done) {
