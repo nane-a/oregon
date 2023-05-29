@@ -43,7 +43,7 @@ export const RouteForm: React.FC = (): JSX.Element => {
 
     useEnter(() => setStep(false), route_type !== '')
     useEnter(() => navigate('/calculating-form/payment'), !!distanceAndPrice?.success)
-
+    
     useEffect(() => {
         if (select?.route?.data) {
             setRoute_type(select?.route?.data.route_type)
@@ -161,7 +161,7 @@ export const RouteForm: React.FC = (): JSX.Element => {
                     <div className='starting__inp'>
                         <label htmlFor="">Start point:</label>
                         <ReactGoogleAutocomplete
-                            apiKey={'AIzaSyD-Work-rCSEpWMY_uzULiTe_THPGigNcQ'}
+                            apiKey={process.env.REACT_APP_API_KEY}
                             onPlaceSelected={(place) => { setStartPoint(`${place.geometry.location.lat()}, ${place.geometry.location.lng()}`) }}
                             placeholder='City or zip code'
                             options={{
@@ -203,7 +203,7 @@ export const RouteForm: React.FC = (): JSX.Element => {
 
                                 <div className='stops-container__item__inp'>
                                     <ReactGoogleAutocomplete
-                                        apiKey={'AIzaSyD-Work-rCSEpWMY_uzULiTe_THPGigNcQ'}
+                                        apiKey={process.env.REACT_APP_API_KEY}
                                         onPlaceSelected={(place) => handleInputChange(place, i)}
                                         placeholder='City or zip code'
                                         options={{

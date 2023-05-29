@@ -5,8 +5,6 @@ export const useEnter = (callback: Function, condition: boolean = true) => {
         
         if (event.key === "Enter" && condition) {
             event.preventDefault()
-            console.log('s');
-            
             callback()
         }
     }
